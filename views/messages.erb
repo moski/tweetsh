@@ -1,0 +1,5 @@
+<h2><%= @received.size %> Received Messages</h2>
+<%= partial 'messages', :locals => {:messages => @received} %>
+
+<h2><%= @sent.size %> Sent Messages</h2>
+<%= partial 'messages', :locals => {:messages => @sent} %>

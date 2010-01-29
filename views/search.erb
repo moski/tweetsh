@@ -1,0 +1,9 @@
+<div style="padding-left:90px;">
+    <form action="/search">
+        <input style="font-size:20px" type="text" name="q" value="<%= params[:q] %>"/>
+        <input style="font-size:20px" type="submit" value="search"/>
+    </form>
+</div>
+<br/>
+
+<%= partial 'results' %>

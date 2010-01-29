@@ -1,0 +1,86 @@
+body,p,a,td{
+	color:rgb(153, 153, 153);
+	font-family:courier,fixed,swiss,sans-serif;
+	font-size:12px;
+	background-color: #222222;
+}
+
+a,a:link,a:visited {
+	text-decoration: none;
+	color: #77dd11;
+}
+a:hover {
+	text-decoration: underline;
+	color: #77dd11;
+}
+a:active {
+	text-decoration: underline;
+	color: #dddddd;
+}
+
+.container{
+	margin-left:30px;
+}
+
+
+.term {
+	font-family: courier,fixed;
+	font-size: 12px;
+	color: #33d011;
+	background: none;
+}
+
+.termReverse {
+	font-family: courier,fixed;
+	font-size: 12px;
+	color: #111111;
+	background: #33d011;
+}
+
+.grey {
+	font-family: courier,fixed;
+	font-size: 12px;
+	color: #999999;
+}
+
+#input {
+	overflow:hidden;
+	width:400px;
+	margin-left:8px;
+}
+
+#output {
+	margin-left:8px;
+	margin-top:8px;
+}
+
+#output .sexy{
+	color:#666666;
+}
+
+#output span.commands{
+	color:#CCFFAA;
+}
+
+
+input.cmdline {
+	border:0 none;
+	font-family: courier,fixed;
+	font-size:12px;
+	margin:0;
+	padding:0;
+	width:90%;
+	background-color: #222222;
+	color:#CCFFAA;
+	padding-left:5px;
+}
+
+
+div.prompt {
+	display:inline;
+	margin:0;
+	padding:0;
+	white-space:nowrap;
+	float:left;
+	color:#666666;
+}
