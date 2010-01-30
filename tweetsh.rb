@@ -3,6 +3,11 @@ require 'rubygems'
 require 'sinatra'
 require 'twitter_oauth'
 require 'lib/authentication'
+require 'json'
+
+require 'wrappers/user'
+
+mime :json, "application/json"
 
 configure do
   set :sessions, true
@@ -20,6 +25,15 @@ before do
   load_client
   #@rate_limit_status = @client.rate_limit_status
 end
+
+# Yep, its that simple :) ....
+post '/twitter/users' do
+  data = @client.show(params['user'])
+  user = User.new(data)
+  user.to_json
+end
+
+
 
 get '/' do
   redirect '/timeline' if logged_in?

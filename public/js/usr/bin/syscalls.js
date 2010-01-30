@@ -10,7 +10,9 @@
 shell.module("shell.syscalls");
 
 /* Add a new node to the tree **/
-shell.syscalls.mkdir = function(path){
+shell.syscalls.mkdir = function(path , mount_point){
+	var mount_point = null;
+	
 	// if the path is relative make it absoulte
 	if(shell.twitter_FS.isRelative(path)){
 		path = shell.twitter_FS.expandPath(path);
@@ -25,7 +27,7 @@ shell.syscalls.mkdir = function(path){
 	}
 	
 	// Ok, @ this point the parent path exists
-	var node 		= new twitter_inode(shell.twitter_FS.MODE_DIR , shell.twitter_FS.ACL_PUBLIC , [] , parent  , shell.twitter_FS.basename(path) , 3);
+	var node 		= new twitter_inode(shell.twitter_FS.MODE_DIR , shell.twitter_FS.ACL_PUBLIC , [] , parent  , shell.twitter_FS.basename(path) , mount_point);
 	var node_parent = new twitter_inode(shell.twitter_FS.MODE_DIR , shell.twitter_FS.ACL_PUBLIC , [] , node  , ".." , 3);
 	var node_self   = new twitter_inode(shell.twitter_FS.MODE_DIR , shell.twitter_FS.ACL_PUBLIC , [] , node  , "."  , 3);
 	
@@ -68,8 +70,8 @@ shell.syscalls.path2Inode = function(path){
 	
 	for (var i=0; i<names.length; i++) {
 		current = shell.syscalls.DIRGlob(names[i] , current);
-		if(current == false){
-			return false;
+		if(current == shell.macros.FAIL || current == shell.macros.PENDING){
+			return current;
 		}
 	}
 	return current;
@@ -102,7 +104,15 @@ shell.syscalls.DIRGlob = function(name , folderInode){
 			return folderInode.children[i];
 		}
 	}
-	return false;
+	
+	if(folderInode.mount_to != null){
+		$.post('/' + folderInode.mount_to , {user: name}, eval(folderInode.mount_callback) , "json");
+		shell.std.clog(folderInode.name + " is a mounted to --> " + folderInode.mount_to);
+		return shell.macros.PENDING;
+	}
+	
+	shell.errors.errindex = "ENOTDIR";
+	return shell.macros.FAIL;
 }
 
 /* return working directory name **/
@@ -110,6 +120,7 @@ shell.syscalls.getPWD = function(){
 	return shell.syscalls.inode2Path(shell.twitter_FS.cwd);
 }
 
+/* change the current working dir into the given path **/
 shell.syscalls.chdir = function(path){
 	var node = null
 	if(path == "-"){	
@@ -118,12 +129,38 @@ shell.syscalls.chdir = function(path){
 		node = shell.syscalls.path2Inode(path);
 	}
 	
-	if(node != false){
+	if(node == shell.macros.FAIL || node == shell.macros.PENDING){
+		return node;
+	}else{
 		if(node.mode == shell.twitter_FS.MODE_DIR){
 			shell.twitter_FS.cwdOld = shell.twitter_FS.cwd;
 			shell.twitter_FS.cwd = node;
+			return 1;
 		}else{
-			console.log("its not a directory");
+			shell.errors.errindex = "ENOTDIR";
+			return shell.macros.FAIL;
 		}
 	}
+	return shell.macros.FAIL;
+}
+
+/* Mount folder to interact with twitter + localfile structure.
+   mount_point 		--> The Ajax Call it sends to check when validating the inode
+   mount_callback	--> The ajax callback.
+   for example
+     mount("/home/" , "twitter/users" , "shell.callback.getUser"); 
+     will map the home folder to the twitter/users action ...
+     so if i do "cd /home/moski_doski" --> will search home for inode called moski_doski
+     if it doesn't exisit , it calls /twitter/users/   and awaits for its call back in shell.callback.getUser
+  
+   I honstely couldn't think of any better/cleaner way of doing this.
+**/
+shell.syscalls.mount = function (path, mount_point, mount_callback){
+	var node = shell.syscalls.path2Inode(path)
+	if (node == shell.macros.FAIL){
+		return node;
+	} 
+	node.mount_to = mount_point;
+	node.mount_callback = mount_callback;
+	return shell.macros.PASS;
 }

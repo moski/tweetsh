@@ -16,7 +16,6 @@ shell.module("shell.pipe");
 */
 shell.pipe.callQueue = new Array();
 
-
 /*  The output of each pipe is saved in the dataOnPipe var */
 shell.pipe.dataOnPipe = null;
 

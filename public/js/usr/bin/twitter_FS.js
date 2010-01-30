@@ -17,11 +17,11 @@ shell.twitter_FS.cwdOld = null
 /* Initialize the twitter_FS by creating the main data strcuture **/
 shell.twitter_FS.initialize = function(){
 	shell.syscalls.mkdir("/");
-	shell.syscalls.mkdir("/home");
-	shell.syscalls.mkdir("/home/moski");
+	shell.syscalls.mkdir("/home" , "twitter/users");
+	shell.syscalls.mount("/home/" , "twitter/users" ,"shell.callbacks.getUser"); 
 	
 	/* Set the current working directory to "/"  **/
-	shell.syscalls.chdir("/home/moski");
+	shell.syscalls.chdir("/home");
 }
 
 /* check if a path is relative **/

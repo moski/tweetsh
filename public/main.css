@@ -62,6 +62,9 @@ a:active {
 	color:#CCFFAA;
 }
 
+#output .error{
+	color:#Fe6353;
+}
 
 input.cmdline {
 	border:0 none;

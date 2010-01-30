@@ -91,6 +91,14 @@ shell.UI.showInput = function(){
 shell.UI.hideInput = function(){
 	shell.UI.inputElement.css('display' , 'none');
 }
+shell.UI.lockInput = function(){
+  shell.UI.inputElement.css('display' , 'none');
+}
+
+shell.UI.unlockInput = function(){
+  shell.UI.inputElement.css('display' , 'block');
+}
+
 
 /* Get the shell UI ready for the next command **/
 shell.UI.prepareForNextCommand = function(){
@@ -99,6 +107,9 @@ shell.UI.prepareForNextCommand = function(){
 
   	shell.UI.focusCursor();
 //	shell.UI.scrollToCursor();
+	
+	
+	shell.UI.unlockInput();
 }
 
 shell.processInput = function(){
@@ -142,7 +153,8 @@ shell.exec = function (){
      	/*  Load the default command, if no command is find **/
 		commandObj = shell.commands.list[shell.config.mode];
 	}else{
-  		/*  @ this point we have the commandObj, so no need for the first arg which is the command name **/
+		shell.execStack = args.slice();
+		/*  @ this point we have the commandObj, so no need for the first arg which is the command name **/
 		args.shift();
 	}
 	
@@ -151,9 +163,45 @@ shell.exec = function (){
 	return false;
 }
 
+shell.execFromCallStack = function(failed){
+	if(failed == undefined) failed = false;
+
+	var args = shell.execStack;
+	
+	/* Find the commandObj so we can call it **/
+	var commandObj = shell.commands.findCommand(args[0]);
+	
+	if(commandObj == null) {
+		commandObj = shell.commands.list[shell.config.mode];
+	}else{
+		shell.execStack = null;
+		args.shift();
+	}	
+	(failed ? commandObj.fail(args) : commandObj.call(args))
+}
 
 /* Get the shell ready for the next command **/
 shell.prepareForNextCommand = function(){
 	shell.UI.prepareForNextCommand();
 	shell.pipe.resetCallQueueEmpty();
 }
+
+/* Deals with the shell errors 
+   An Assiocated array implemantation. When a command gets included it pushs the defined
+   error assiocated with it into the error map ... when an error happen, we set errindex for the correct error.
+   calling shell.std.cerr("extra infomation") will show the current error message + whatever we pass to the function.
+   check: command.js --> shell.commands.require
+		  iostream   --> shell.std.cerr
+**/
+shell.module("shell.errors");
+shell.errors.errindex = null;
+shell.errors.errors  = new Array();
+
+
+/* Some contstants to unify the return values **/
+shell.module("shell.macros");
+shell.macros.FAIL	 = -1;
+shell.macros.PASS 	 = 1;
+shell.macros.PENDING = 0;
+
+shell.execStack = null;

@@ -13,6 +13,11 @@ shell.command.clear = function(){
   this.aliases = new Array("clear","c");
   this.help = "clear the screen";
 
+  // no errors, just clear the frakkin screen ...	
+  this.errors = function(){
+  	return [];
+  }
+
   this.call = function(args){
   	shell.std.clear();
 	shell.prepareForNextCommand();

@@ -8,19 +8,20 @@
  *  require 'commands.js'
  *  require 'iostream.js'
  */
-
-
-
 shell.command.pwd = function(){
   this.name = "pwd";
   this.aliases = new Array("pwd");
   this.help = "return working directory name";
 
+  // as easy as it gets, no errors for this function ... assuming my inode validation is working :)
+  this.errors = function(){
+	return [];
+  }
+  
   this.call = function(args){
-	var div = '<div>' + shell.syscalls.getPWD() + '</div>';	
-	shell.UI.outputElement.append(div);
+	var output = '<div>' + shell.syscalls.getPWD() + '</div>';	
+	shell.std.count(output);
 	shell.prepareForNextCommand();
-	//return shell.syscalls.getPWD();
   }
 }
 shell.commands.require("pwd");

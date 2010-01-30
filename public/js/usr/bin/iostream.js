@@ -8,7 +8,6 @@
  *   	
  */
 
-
 /* namespace for the std stuff **/
 shell.module("shell.std");
 
@@ -27,6 +26,18 @@ shell.std.echoInput = function (){
 	out += shell.UI.getPrompt() + "</span><span class='commands'>";
 	out += shell.UI.inputField.val() + "</span></div>";
     shell.std.print(out);
+}
+
+/* Standard Error **/
+shell.std.cerr = function(data){
+	output = '<div class="error">' + shell.errors.errors[shell.errors.errindex] + data + "</div>";
+	shell.std.print(output);
+	shell.errors.errindex = null;
+}
+
+/* Standard Logging: Use the mighty firebug for debugging .... fb i luvvvv uuuuuuuuu  **/
+shell.std.clog = function(data){
+	console.log(data);
 }
 
 /* Clear the STD output **/

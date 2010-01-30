@@ -30,8 +30,6 @@ shell.twitter_FS.MODE_MAGIC_DIR = 2;
 shell.twitter_FS.ACL_PUBLIC= 0;	
 shell.twitter_FS.ACL_PRIVATE = 1;		
 
-
-
 shell.twitter_FS.File_SEPARATOR = "/";
 
-var twitter_inode = jQuery.makeStruct("mode acl children parent name inode_num");
+var twitter_inode = jQuery.makeStruct("mode acl children parent name mount_to mount_callback");
