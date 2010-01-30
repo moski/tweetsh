@@ -1,0 +1,3 @@
+consumer_key: key
+consumer_secret: key
+callback_url: http://localhost:4567/oauth_callback
