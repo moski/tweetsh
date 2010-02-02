@@ -11,13 +11,13 @@
 /* namespace for the std stuff **/
 shell.module("shell.std");
 
-shell.std.count = function (data){
+shell.std.cout = function (data, parser){
 	// If nothing on the pipe, then print to the screen
 	// other wise deal with the pipe stuff 
 	if (shell.pipe.callQueueEmpty()){
-		shell.std.print(data);
+		var parsed_data = (parser == null ? data : parser(data));	
+		shell.std.print(parsed_data);
 	}else{
-		
 	}
 }
 

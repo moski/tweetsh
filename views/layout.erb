@@ -9,14 +9,20 @@
 	<% ['usr/include/shell.h.js' , 'usr/bin/keyboard.js' ,'usr/bin/shell.js' , 'usr/bin/commands.js' , 
 		'usr/bin/pipe.js' , 'usr/bin/iostream.js' , 'utilites.jquery.js' , 'usr/bin/clear.js', 
 		'usr/include/inode.h.js' , 'usr/bin/twitter_FS.js', 'usr/bin/syscalls.js', 'usr/bin/pwd.js',
-		'usr/bin/cd.js' , 'usr/bin/callbacks.js' , 'usr/bin/twitter.js'
+		'usr/bin/cd.js' , 'usr/bin/callbacks.js' , 'usr/bin/twitter.js' , 'usr/bin/ls.js',
+		'usr/bin/parsers.js' , 'usr/bin/ssh.js'
 		
 		].each do |path| %>
 		<script src="/js/<%= path %>" type="text/javascript"></script>
 	<% end %>
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
-			shell.initialize();
+			<% if logged_in? %>
+				var current_user = '<%=  session["current_user"]["screen_name"] %>';
+			<% else %>
+				var current_user = null;
+			<% end %>
+			shell.initialize(current_user);
 		});
 	</script>
 </head>

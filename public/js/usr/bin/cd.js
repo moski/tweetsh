@@ -29,8 +29,7 @@ shell.command.cd = function(){
 	}else if(out == shell.macros.FAIL){
 		this.fail();
 	}else{
-		shell.UI.lockInput();
-		shell.std.clog("Pending the Ajax Request ...... ZzZzZzZzZzZzZzZzZzZzZzZzZz");
+		shell.std.clog("Pending the Ajax Request to validate " + args[0]);
 		return false;
 	}
   }

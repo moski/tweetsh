@@ -10,7 +10,7 @@
 shell.module("shell.syscalls");
 
 /* Add a new node to the tree **/
-shell.syscalls.mkdir = function(path , mount_point){
+shell.syscalls.mkdir = function(path){
 	var mount_point = null;
 	
 	// if the path is relative make it absoulte
@@ -105,9 +105,11 @@ shell.syscalls.DIRGlob = function(name , folderInode){
 		}
 	}
 	
-	if(folderInode.mount_to != null){
-		$.post('/' + folderInode.mount_to , {user: name}, eval(folderInode.mount_callback) , "json");
-		shell.std.clog(folderInode.name + " is a mounted to --> " + folderInode.mount_to);
+	// ok, if this folder listens to an external cd , send the ajax request.
+	if(folderInode.mount_ptr != null &&  jQuery.ArrayHasKey(folderInode.mount_ptr, 'cd')){
+		var mount_st 	 = folderInode.mount_ptr['cd'];
+		var current_path = shell.syscalls.inode2Path(folderInode); 
+		$.post('/' + mount_st.mount_to , {user: name , path : current_path}, eval(mount_st.mount_callback) , "json");
 		return shell.macros.PENDING;
 	}
 	
@@ -145,22 +147,40 @@ shell.syscalls.chdir = function(path){
 }
 
 /* Mount folder to interact with twitter + localfile structure.
+   cd				--> cammdn
    mount_point 		--> The Ajax Call it sends to check when validating the inode
    mount_callback	--> The ajax callback.
    for example
-     mount("/home/" , "twitter/users" , "shell.callback.getUser"); 
-     will map the home folder to the twitter/users action ...
+     mount("/home/" , "cd" ,"twitter/users" , "shell.callback.getUser"); 
+     will map the home folder to the twitter/users action for the CD command ...
      so if i do "cd /home/moski_doski" --> will search home for inode called moski_doski
      if it doesn't exisit , it calls /twitter/users/   and awaits for its call back in shell.callback.getUser
   
    I honstely couldn't think of any better/cleaner way of doing this.
 **/
-shell.syscalls.mount = function (path, mount_point, mount_callback){
+shell.syscalls.mount = function (path, cmd , mount_point, mount_callback){
 	var node = shell.syscalls.path2Inode(path)
 	if (node == shell.macros.FAIL){
 		return node;
 	} 
-	node.mount_to = mount_point;
-	node.mount_callback = mount_callback;
+	var mount_st = new mount_struct(mount_point,mount_callback);
+	if(node.mount_ptr == null){
+		node.mount_ptr = new Array();
+	}
+	node.mount_ptr[cmd] = mount_st;
 	return shell.macros.PASS;
+}
+
+shell.syscalls.mkdirHome = function(basedir , username){
+	var path = shell.twitter_FS.join(basedir , username);
+	var timeline_path = shell.twitter_FS.join(path , 'timeline');
+	var friends_path = shell.twitter_FS.join(path , 'friends');
+	var followers_path = shell.twitter_FS.join(path , 'followers');
+	shell.syscalls.mkdir(path);
+	shell.syscalls.mkdir(timeline_path);
+	shell.syscalls.mkdir(followers_path);
+	shell.syscalls.mkdir(friends_path);
+	shell.syscalls.mount(timeline_path,  "ls","twitter/user_timeline" ,"shell.callbacks.lsTweets");
+	shell.syscalls.mount(friends_path,   "ls","twitter/users/friends" ,"shell.callbacks.lsUsers"); 
+	shell.syscalls.mount(followers_path, "ls","twitter/followers" ,"shell.callbacks.lsUsers"); 
 }

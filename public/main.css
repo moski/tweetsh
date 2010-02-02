@@ -18,11 +18,16 @@ a:active {
 	color: #dddddd;
 }
 
+
+
+
+fieldset, img {
+	border-color:transparent;
+	border-width:0;
+}
 .container{
 	margin-left:30px;
 }
-
-
 .term {
 	font-family: courier,fixed;
 	font-size: 12px;
@@ -87,3 +92,68 @@ div.prompt {
 	float:left;
 	color:#666666;
 }
+
+
+#output span.dir{
+	padding-right:30px;
+}
+
+/** listing tweets **/
+ol.statuses {
+	font-size:12px;
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+	margin-left:0px;
+	padding-left:0px;
+}
+
+ol.statuses li.status, ol.statuses li.direct_message {
+	line-height:16px;
+	width:700px;
+}
+
+
+ol.statuses li.status, ol.statuses li.direct_message {
+	line-height:16px;
+	padding:10px 0 8px;
+	position:relative;
+	border-bottom:1px solid;
+}
+
+ol.statuses .thumb {
+	display:block;
+	height:50px;
+	left:0;
+	margin:0 10px 0 0;
+	overflow:hidden;
+	position:absolute;
+	width:50px;
+}
+
+ol.statuses .thumb img {
+	height:48px;
+	width:48px;
+}
+
+ol.statuses span.status-body {
+	display:block;
+	margin-left:56px;
+	min-height:48px;
+	overflow:hidden;
+	width:625px;
+}
+
+ li .meta, li .actions-hover {
+	height:auto;
+}
+
+.meta {
+	color:#999999;
+	display:block;
+	font-size:11px;
+}
+.entry-meta {
+	margin-top:2px;
+}
+

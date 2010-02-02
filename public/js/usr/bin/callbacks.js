@@ -16,11 +16,18 @@ shell.callbacks.getUser = function(data){
 		shell.execFromCallStack(true);
 	}else{
 		var user = data['data'];
-		
-		// This should be more generic, but works for now ...
-		shell.syscalls.mkdir("/home/" + user['screen_name']);
+		shell.syscalls.mkdirHome(user['path'],user['screen_name']);
 		
 		// ok, lets redo and call the command again after we've created the directory. 
-		shell.execFromCallStack(false);	
+		shell.execFromCallStack(false);
 	}
+}
+
+shell.callbacks.lsTweets = function(data){
+	shell.execCallBack(data);
+}
+
+
+shell.callbacks.lsUsers = function(data){
+	shell.execCallBack(data);
 }

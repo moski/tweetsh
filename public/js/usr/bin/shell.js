@@ -9,15 +9,15 @@
  */
 
 /* Lets do this , intilialize the entire system **/
-shell.initialize = function(){
-	shell.twitter_FS.initialize();
+shell.initialize = function(current_user){
+	shell.twitter_FS.initialize(current_user);
 	shell.UI.initialize();
 }
 
 /* Define all the configurtion needed for shell to work. **/
 shell.module("shell.config");
 
-shell.config.user = "guest";
+shell.config.user = "nobody";
 shell.config.host = "twitter.com";
 shell.config.mode = "help";
 
@@ -45,6 +45,8 @@ shell.UI.initialize = function(){
 	shell.UI.showInput();
 	
 	shell.UI.focusCursor();
+	
+	jQuery.ajaxSetup({ 'beforeSend': shell.UI.lockInput });
 }
 
 shell.UI.hookEvents = function(){
@@ -166,7 +168,8 @@ shell.exec = function (){
 shell.execFromCallStack = function(failed){
 	if(failed == undefined) failed = false;
 
-	var args = shell.execStack;
+	/* create a local copy not a pointer to they array **/
+	var args = shell.execStack.slice();
 	
 	/* Find the commandObj so we can call it **/
 	var commandObj = shell.commands.findCommand(args[0]);
@@ -174,11 +177,22 @@ shell.execFromCallStack = function(failed){
 	if(commandObj == null) {
 		commandObj = shell.commands.list[shell.config.mode];
 	}else{
-		shell.execStack = null;
+		//shell.execStack = null;
 		args.shift();
 	}	
-	(failed ? commandObj.fail(args) : commandObj.call(args))
+	(failed ? commandObj.fail(args) : commandObj.call(args));
 }
+
+
+shell.execCallBack = function(data){
+	/* create a local copy not a pointer to they array **/
+	var args = shell.execStack.slice();
+	var commandObj = shell.commands.findCommand(args[0]);
+	commandObj.callback(data);
+}
+
+
+
 
 /* Get the shell ready for the next command **/
 shell.prepareForNextCommand = function(){
@@ -196,6 +210,7 @@ shell.prepareForNextCommand = function(){
 shell.module("shell.errors");
 shell.errors.errindex = null;
 shell.errors.errors  = new Array();
+shell.errors.errors['GENERAL'] = 'error:';
 
 
 /* Some contstants to unify the return values **/

@@ -15,13 +15,23 @@ shell.twitter_FS.cwd = null
 shell.twitter_FS.cwdOld = null
 
 /* Initialize the twitter_FS by creating the main data strcuture **/
-shell.twitter_FS.initialize = function(){
+shell.twitter_FS.initialize = function(current_user){
+	if(current_user == undefined){
+		shell.config.user = "nobody";
+	}else{
+		shell.config.user = current_user;
+	}
+	
 	shell.syscalls.mkdir("/");
 	shell.syscalls.mkdir("/home" , "twitter/users");
-	shell.syscalls.mount("/home/" , "twitter/users" ,"shell.callbacks.getUser"); 
+	shell.syscalls.mount("/home/" , "cd" ,"twitter/users" ,"shell.callbacks.getUser"); 
 	
-	/* Set the current working directory to "/"  **/
-	shell.syscalls.chdir("/home");
+	if(shell.twitter.loggedIn()){
+		shell.syscalls.mkdirHome("/home/",shell.config.user);
+		shell.syscalls.chdir(shell.twitter_FS.join("/home/" , shell.config.user));
+	}else{
+		shell.syscalls.chdir('/');
+	}
 }
 
 /* check if a path is relative **/

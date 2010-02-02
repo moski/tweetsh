@@ -5,7 +5,6 @@
  *	
  */
 
-
 /*
  *	struct twitter_inode {
  *	  int  i_mode;			
@@ -14,7 +13,6 @@
  *	};
  *
 */
-
 
 /* The container for twitter_FS **/  
 shell.module("shell.twitter_FS");
@@ -32,4 +30,5 @@ shell.twitter_FS.ACL_PRIVATE = 1;
 
 shell.twitter_FS.File_SEPARATOR = "/";
 
-var twitter_inode = jQuery.makeStruct("mode acl children parent name mount_to mount_callback");
+var twitter_inode = jQuery.makeStruct("mode acl children parent name mount_to mount_ptr");
+var mount_struct  = jQuery.makeStruct("mount_to mount_callback");
