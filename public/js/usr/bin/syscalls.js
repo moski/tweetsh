@@ -172,15 +172,39 @@ shell.syscalls.mount = function (path, cmd , mount_point, mount_callback){
 }
 
 shell.syscalls.mkdirHome = function(basedir , username){
-	var path = shell.twitter_FS.join(basedir , username);
-	var timeline_path = shell.twitter_FS.join(path , 'timeline');
-	var friends_path = shell.twitter_FS.join(path , 'friends');
-	var followers_path = shell.twitter_FS.join(path , 'followers');
+	// home folder
+	var path		   = shell.twitter_FS.join(basedir , username);
 	shell.syscalls.mkdir(path);
+	
+	//timelines
+	var timeline_path  = shell.twitter_FS.join(path , 'timeline');
+	var mentions_path  = shell.twitter_FS.join(path , 'mentions');
+	var fr_timeline_path   = shell.twitter_FS.join(path , 'friends_timeline');
 	shell.syscalls.mkdir(timeline_path);
-	shell.syscalls.mkdir(followers_path);
+	shell.syscalls.mkdir(mentions_path);
+	shell.syscalls.mkdir(fr_timeline_path);
+	shell.syscalls.mount(timeline_path,     "ls","twitter/timelines/user_timeline"   , "shell.callbacks.lsTweets");
+	shell.syscalls.mount(mentions_path,     "ls","twitter/timelines/mentions"        , "shell.callbacks.lsTweets");
+	shell.syscalls.mount(fr_timeline_path,  "ls","twitter/timelines/friends_timeline", "shell.callbacks.lsTweets");
+	
+	//retweets
+	var retweets  	  = shell.twitter_FS.join(path , 'retweets');
+	var retweets_byme = shell.twitter_FS.join(retweets , 'by_me'); 
+	var retweets_tome = shell.twitter_FS.join(retweets , 'to_me'); 
+	var retweets_offme = shell.twitter_FS.join(retweets , 'off_me'); 
+	shell.syscalls.mkdir(retweets);
+	shell.syscalls.mkdir(retweets_byme);
+	shell.syscalls.mkdir(retweets_tome);
+	shell.syscalls.mkdir(retweets_offme);
+	shell.syscalls.mount(retweets_byme,     "ls","twitter/timelines/retweeted_by_me"        , "shell.callbacks.lsTweets");
+	shell.syscalls.mount(retweets_tome,     "ls","twitter/timelines/retweeted_to_me"        , "shell.callbacks.lsTweets");
+	shell.syscalls.mount(retweets_offme,     "ls","twitter/timelines/retweets_of_me"        , "shell.callbacks.lsTweets");
+	
+	// friends and followers
+	var friends_path   = shell.twitter_FS.join(path , 'friends');
+	var followers_path = shell.twitter_FS.join(path , 'followers');
 	shell.syscalls.mkdir(friends_path);
-	shell.syscalls.mount(timeline_path,  "ls","twitter/user_timeline" ,"shell.callbacks.lsTweets");
-	shell.syscalls.mount(friends_path,   "ls","twitter/users/friends" ,"shell.callbacks.lsUsers"); 
-	shell.syscalls.mount(followers_path, "ls","twitter/followers" ,"shell.callbacks.lsUsers"); 
+	shell.syscalls.mkdir(followers_path);
+	shell.syscalls.mount(friends_path,   "ls","twitter/users/friends"   ,"shell.callbacks.lsUsers"); 
+	shell.syscalls.mount(followers_path, "ls","twitter/users/followers" ,"shell.callbacks.lsUsers"); 
 }
