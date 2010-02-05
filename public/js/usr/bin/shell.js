@@ -42,7 +42,7 @@ shell.UI.initialize = function(){
 
 	shell.UI.setPrompt();
 	
-	shell.UI.showInput();
+	shell.UI.unlockInput();
 	
 	shell.UI.focusCursor();
 	
@@ -53,7 +53,7 @@ shell.UI.hookEvents = function(){
   shell.UI.inputField.keyup(function(event)   { return shell.keyboard.mcursor(event); });
   shell.UI.bodyElement.focus(function(event)  { return shell.UI.focusCursor(event); });
   shell.UI.bodyElement.click(function(event)  { return shell.UI.focusCursor(event); }); 
-  //shell.UI.bodyElement.keydown(function(event){ return tweetShell.keyboard.keyDownHandler(event); }); 
+  shell.UI.inputField.keydown(function(event){ return shell.keyboard.keyDownHandler(event); }); 
 }
 
 /*  give the current input the cursor focus */
@@ -86,21 +86,18 @@ shell.UI.setPrompt = function(){
 	var html = shell.config.user +  '@twitter.com:' + shell.syscalls.getPWD()  + '>';
 	shell.UI.promptElement.html(html);
 }
-
-shell.UI.showInput = function(){
-	shell.UI.inputElement.css('display' , 'block');
-}
-shell.UI.hideInput = function(){
-	shell.UI.inputElement.css('display' , 'none');
-}
 shell.UI.lockInput = function(){
   shell.UI.inputElement.css('display' , 'none');
 }
-
 shell.UI.unlockInput = function(){
   shell.UI.inputElement.css('display' , 'block');
 }
 
+shell.UI.RegReplaceInInput = function(old , replacment){
+	var reg = new RegExp(old, 'i');
+	var input = shell.UI.inputField.val();
+	shell.UI.inputField.val(input.replace(reg, replacment ));
+}
 
 /* Get the shell UI ready for the next command **/
 shell.UI.prepareForNextCommand = function(){

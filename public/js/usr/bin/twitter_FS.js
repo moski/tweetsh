@@ -41,22 +41,19 @@ shell.twitter_FS.isRelative = function(path){
 
 
 shell.twitter_FS.basename = function(path){
-	var tmp_arr = path.split("/");
-	path =  tmp_arr.pop();
-	if (path == ""){
-		return "/";
-	}
-	return path;
+	var b = path.replace(/^.*[\/\\]/g, '');
+    if (typeof(suffix) == 'string' && b.substr(b.length-suffix.length) == suffix) {
+    	b = b.substr(0, b.length-suffix.length);
+    }    
+    return b;
 }
 
 shell.twitter_FS.dirname = function(path){
-	var tmp_arr = path.split("/");
-	tmp_arr.pop();
-	path = tmp_arr.join("/");
-	if(path == ""){
-		return "/"
+	var dir = path.replace(/\\/g,'/').replace(/\/[^\/]*$/, '');
+	if(dir == ""){
+		return "/";
 	}
-	return path;
+	return dir;
 }
 
 
@@ -75,4 +72,29 @@ shell.twitter_FS.join = function(path1 , path2){
 		path2 = path2.substr(1);
 	}
 	return path1 + shell.twitter_FS.File_SEPARATOR + path2;
+}
+
+// Given an inode, filter the children to find all the children that contains a string
+shell.twitter_FS.filterChildren = function(children , str){
+	// If no string to match, return all the children.
+	if(str == ""){
+		return children;
+	}
+	var arr = [];
+	for(var i=0; i < children.length; i++){
+		var reg = new RegExp('\\b'+ str, 'gi');
+		if(reg.exec(children[i].name)){
+			shell.std.clog("pushing: " + children[i].name);
+			arr.push(children[i]);
+		}
+	}
+	return arr;
+}
+
+shell.twitter_FS.getNamesFromInodes = function(arr){
+	var names = []
+	for(var i=0; i < arr.length; i++){
+		names.push(arr[i].name);
+	}
+	return names;
 }

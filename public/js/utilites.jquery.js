@@ -167,3 +167,11 @@ jQuery.relative_time = function(time_value) {
 
     return r;
 }
+
+
+function ltrim(text) {
+    return text.replace(/^\s+/g, "");
+}
+function rtrim(text) {
+    return text.replace(/\s+$/g, "");
+}

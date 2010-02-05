@@ -49,7 +49,7 @@ shell.syscalls.mkdir = function(path){
 }
 
 /* Given the path, return the inode object for path **/
-shell.syscalls.path2Inode = function(path){
+shell.syscalls.path2Inode = function(path , callback){
 	if(path == "/"){
 		return shell.twitter_FS.root;
 	}
@@ -69,7 +69,7 @@ shell.syscalls.path2Inode = function(path){
 	var current = shell.twitter_FS.root;		
 	
 	for (var i=0; i<names.length; i++) {
-		current = shell.syscalls.DIRGlob(names[i] , current);
+		current = shell.syscalls.DIRGlob(names[i] , current , callback);
 		if(current == shell.macros.FAIL || current == shell.macros.PENDING){
 			return current;
 		}
@@ -92,7 +92,7 @@ shell.syscalls.inode2Path = function(inode){
 }
 
 /* Return a file in a given folder **/
-shell.syscalls.DIRGlob = function(name , folderInode){
+shell.syscalls.DIRGlob = function(name , folderInode , callback){
 	if(name == ".."){
 		return folderInode.parent;
 	}
@@ -109,7 +109,21 @@ shell.syscalls.DIRGlob = function(name , folderInode){
 	if(folderInode.mount_ptr != null &&  jQuery.ArrayHasKey(folderInode.mount_ptr, 'cd')){
 		var mount_st 	 = folderInode.mount_ptr['cd'];
 		var current_path = shell.syscalls.inode2Path(folderInode); 
-		$.post('/' + mount_st.mount_to , {user: name , path : current_path}, eval(mount_st.mount_callback) , "json");
+		if(callback == undefined) callback = mount_st.mount_callback;
+		
+		
+		// Had to use ajax not straight post because i need to disable the global beforeSend
+		// function, for this call, we don't alway want to disable the input. Example, tab completion.
+		// If the command wants to disable the input, it has to do it manually, check CD command for more info.
+		$.ajax({
+			type: "POST",  
+			url: '/' + mount_st.mount_to,
+		  	dataType: "json",
+			data: {user: name , path : current_path},
+			success: eval(callback),
+			beforeSend: function(){}
+		});
+		//$.post('/' + mount_st.mount_to , {user: name , path : current_path}, eval(callback) , "json");
 		return shell.macros.PENDING;
 	}
 	

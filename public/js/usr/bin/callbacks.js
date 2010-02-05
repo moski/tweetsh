@@ -31,3 +31,16 @@ shell.callbacks.lsTweets = function(data){
 shell.callbacks.lsUsers = function(data){
 	shell.execCallBack(data);
 }
+
+shell.callbacks.getUserTabCompletion = function(data){
+	shell.std.clog("in getUserTabCompletion opaaaaaaaaaaaa");
+	if(shell.twitter.errored(data)){
+		
+	}else{
+		var user = data['data'];
+		shell.syscalls.mkdirHome(user['path'],user['screen_name']);
+		e = jQuery.Event("keydown");
+		e.keyCode = 9;
+		shell.UI.inputField.trigger(e);
+	}
+}
