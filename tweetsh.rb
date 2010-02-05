@@ -110,6 +110,9 @@ post %r{/twitter/users/(friends|followers)} do |action|
 end
 
 # store the request tokens and send to Twitter
+# PLEASE NOTE:
+# when running sinatra + thin ... when u call window.location.replace("/oauth/connect") using chrome, 
+# the session will get lost , no frakkin idea why, for now, use mongrel or webrick.
 get '/oauth/connect' do
   request_token = @client.request_token(
     :oauth_callback => @@config['callback_url']
