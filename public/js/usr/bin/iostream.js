@@ -37,7 +37,9 @@ shell.std.cerr = function(data){
 
 /* Standard Logging: Use the mighty firebug for debugging .... fb i luvvvv uuuuuuuuu  **/
 shell.std.clog = function(data){
-	console.log(data);
+	if (console && typeof console.log == "function"){
+		console.log(data);
+	}
 }
 
 /* Clear the STD output **/

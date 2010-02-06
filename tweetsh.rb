@@ -21,6 +21,9 @@ require 'wrappers/tweets'
 
 # Extend the twitter_oauth library by adding few more functions to the Client class
 require 'lib/extend/twitter_oauth/user'
+require 'lib/extend/twitter_oauth/search'
+require 'lib/extend/twitter_oauth/favorites'
+
 
 # Set the Mime-type for json
 mime :json, "application/json"
@@ -71,19 +74,87 @@ post '/twitter/users' do
   user.to_json
 end
 
-# Handel everything under timelines from mentions to user timelines
+# Handel everything under timelines(public/user/home)
 # @TODO:
 # => Integrate pagination
-post %r{/twitter/timelines/(user_timeline|friends_timeline|mentions|retweeted_by_me|retweeted_to_me|retweets_of_me)} do |action|
+post %r{/twitter/timelines/(user_timeline|home_timeline|public_timeline)} do |action|
   # Extract the username
-  screen_name = (params['path'] =~ /\/([A-Za-z_0-9]+)\/user_timeline|friends_timeline|mentions|retweeted_by_me|retweeted_to_me|retweets_of_me/) ? $1 : nil
+  screen_name = (params['path'] =~ /\/([A-Za-z_0-9]+)\/timelines\/(timeline|personal)/) ? $1 : nil
   
+  #(user_timeline|friends_timeline|mentions|retweeted_by_me|retweeted_to_me|retweets_of_me)
   # Setup the options
   options = {}
   options[:screen_name] = screen_name unless screen_name.nil?
   
   # Get the data and parse it
   data   = @client.send(action ,  options)
+  tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(data)
+  
+  # return data
+  tweets.to_json
+end
+
+# Handel a call to mentions or public_mentions
+# Note: mentions is a direct call to the api, while public_mentions
+#       calls the search engine to get the results back.
+# @TODO:
+# => Integrate pagination
+post %r{/twitter/(mentions|public_mentions)} do |action|
+  # Extract the username, only used if the call is 2 public_mentions
+  screen_name = (params['path'] =~ /\/([A-Za-z_0-9]+)\/(mentions|public_mentions)/) ? $1 : nil
+  
+  # Setup the options
+  options = {}
+  options[:show_user] = true if action == 'public_mentions'
+  
+  # If its a a call to the public_mentions, meaning we are calling the search api.
+  if(action == 'public_mentions')
+    options[:show_user] = true
+    data = @client.send(action, screen_name , options)
+    tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(Tweets.convertSearchResults2TweetsHash(data))
+  else
+    data   = @client.send(action ,  options)
+    tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(data)
+  end
+  
+  # return data
+  tweets.to_json
+end
+
+# Deal with retweets, it will only work if the user is logged in.
+post %r{/twitter/retweets/(by_me|to_me|of_me)} do |action|
+  # Setup the options
+  options = {}
+  
+  # Get the data and parse it
+  # we have 3 actions defined in the twitter_oauth:
+  # => 1.retweeted_by_me  2.retweeted_to_me   3. retweets_of_me
+  # so we need cater for the retweets_ .. a simple if will do.
+  action_name = (action == 'of_me') ? "retweets_#{action}" : "retweeted_#{action}"
+  data   = @client.send(action_name ,  options)
+  tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(data)
+  
+  # return data
+  tweets.to_json
+end
+
+# Handel a call to mentions or public_mentions
+# Note: mentions is a direct call to the api, while public_mentions
+#       calls the search engine to get the results back.
+# @TODO:
+# => Integrate pagination
+post %r{/twitter/favorites/(public|private)} do |action|
+  # Extract the username
+  screen_name = (params['path'] =~ /\/([A-Za-z_0-9]+)\/(favorites)/) ? $1 : nil
+
+  # Setup the options
+  options = {}
+  
+  # Set the screen_name if its a public call.
+  options[:screen_name] = screen_name unless screen_name.nil? && action == 'public'
+  
+  
+  data   = @client.send("favorites" ,  options)
   tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(data)
   
   # return data
@@ -126,7 +197,6 @@ end
 # this is configured on the Twitter application settings page
 get '/oauth/auth' do
   # Exchange the request token for an access token.
-  
   begin
     @access_token = @client.authorize(
       session[:request_token],
@@ -134,10 +204,11 @@ get '/oauth/auth' do
       :oauth_verifier => params[:oauth_verifier]
     )
   rescue OAuth::Unauthorized
+    redirect '/'
   end
   
   if @client.authorized?
-      # Storing the access tokens so we don't have to go back to Twitter again
+       # Storing the access tokens so we don't have to go back to Twitter again
       # in this session.  In a larger app you would probably persist these details somewhere.
       session[:access_token] = @access_token.token
       session[:secret_token] = @access_token.secret
@@ -160,6 +231,7 @@ end
 
 
 ######################### experimental ############################
+=begin
 get '/timeline' do
   @tweets = @client.friends_timeline
   erb :timeline
@@ -196,11 +268,9 @@ get '/search' do
   @search = @client.search(params[:q], :page => params[:page], :per_page => params[:per_page])
   erb :search
 end
-
-
-
-helpers do 
-  def partial(name, options={})
-    erb("_#{name.to_s}".to_sym, options.merge(:layout => false))
-  end
-end
+=end
+#helpers do 
+#  def partial(name, options={})
+#    erb("_#{name.to_s}".to_sym, options.merge(:layout => false))
+#  end
+#end

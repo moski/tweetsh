@@ -175,3 +175,7 @@ function ltrim(text) {
 function rtrim(text) {
     return text.replace(/\s+$/g, "");
 }
+
+jQuery.unescapeHTML = function(html){
+	return $("<div>"+html+"</div>").text();
+}

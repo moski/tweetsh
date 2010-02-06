@@ -26,6 +26,9 @@ shell.twitter_FS.initialize = function(current_user){
 	shell.syscalls.mkdir("/home" , "twitter/users");
 	shell.syscalls.mount("/home/" , "cd" ,"twitter/users" ,"shell.callbacks.getUser"); 
 	
+	shell.syscalls.mkdirAndMount("/public_timeline" , "ls" ,"twitter/timelines/public_timeline","shell.callbacks.lsTweets");
+	
+	
 	if(shell.twitter.loggedIn()){
 		shell.syscalls.mkdirHome("/home/",shell.config.user);
 		shell.syscalls.chdir(shell.twitter_FS.join("/home/" , shell.config.user));

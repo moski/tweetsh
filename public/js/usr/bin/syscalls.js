@@ -191,28 +191,37 @@ shell.syscalls.mkdirHome = function(basedir , username){
 	shell.syscalls.mkdir(path);
 	
 	//timelines
-	var timeline_path  = shell.twitter_FS.join(path , 'timeline');
-	var mentions_path  = shell.twitter_FS.join(path , 'mentions');
-	var fr_timeline_path   = shell.twitter_FS.join(path , 'friends_timeline');
-	shell.syscalls.mkdir(timeline_path);
-	shell.syscalls.mkdir(mentions_path);
-	shell.syscalls.mkdir(fr_timeline_path);
-	shell.syscalls.mount(timeline_path,     "ls","twitter/timelines/user_timeline"   , "shell.callbacks.lsTweets");
-	shell.syscalls.mount(mentions_path,     "ls","twitter/timelines/mentions"        , "shell.callbacks.lsTweets");
-	shell.syscalls.mount(fr_timeline_path,  "ls","twitter/timelines/friends_timeline", "shell.callbacks.lsTweets");
+	//	var fr_timeline_path   = shell.twitter_FS.join(path , 'friends_timeline');
+	//	shell.syscalls.mkdir(timeline_path);
+	//	shell.syscalls.mkdir(fr_timeline_path);
+	//	shell.syscalls.mount(fr_timeline_path,  "ls","twitter/timelines/friends_timeline", "shell.callbacks.lsTweets");
 	
-	//retweets
-	var retweets  	  = shell.twitter_FS.join(path , 'retweets');
-	var retweets_byme = shell.twitter_FS.join(retweets , 'by_me'); 
-	var retweets_tome = shell.twitter_FS.join(retweets , 'to_me'); 
-	var retweets_offme = shell.twitter_FS.join(retweets , 'off_me'); 
-	shell.syscalls.mkdir(retweets);
-	shell.syscalls.mkdir(retweets_byme);
-	shell.syscalls.mkdir(retweets_tome);
-	shell.syscalls.mkdir(retweets_offme);
-	shell.syscalls.mount(retweets_byme,     "ls","twitter/timelines/retweeted_by_me"        , "shell.callbacks.lsTweets");
-	shell.syscalls.mount(retweets_tome,     "ls","twitter/timelines/retweeted_to_me"        , "shell.callbacks.lsTweets");
-	shell.syscalls.mount(retweets_offme,     "ls","twitter/timelines/retweets_of_me"        , "shell.callbacks.lsTweets");
+	// [/home/USER/timelines/]
+	var timelines = shell.twitter_FS.join(path , 'timelines');
+	shell.syscalls.mkdir(timelines);
+	shell.syscalls.mkdirAndMount(shell.twitter_FS.join(timelines , 'timeline') , "ls" ,"twitter/timelines/user_timeline","shell.callbacks.lsTweets")
+	
+	
+	
+	// If i am building my own homeDir
+	if(shell.twitter.loggedIn() && shell.config.user == username){
+		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(timelines , 'personal') , "ls" ,"twitter/timelines/home_timeline","shell.callbacks.lsTweets")
+		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(path , 'mentions') , "ls" ,"twitter/mentions","shell.callbacks.lsTweets")
+		
+		// retweets
+		var retweets  	  = shell.twitter_FS.join(path , 'retweets');
+		shell.syscalls.mkdir(retweets);
+		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(retweets , 'by_me'), "ls" , "twitter/retweets/by_me"  , "shell.callbacks.lsTweets");
+		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(retweets , 'to_me'), "ls","twitter/retweets/to_me"    , "shell.callbacks.lsTweets");
+		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(retweets , 'of_me'), "ls","twitter/retweets/of_me"    , "shell.callbacks.lsTweets");
+		
+		// fav/personal
+		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(path , 'favorites'), "ls","twitter/favorites/private" , "shell.callbacks.lsTweets");
+	}else{
+		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(path , 'mentions') , "ls" ,"twitter/public_mentions","shell.callbacks.lsTweets")
+		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(path , 'favorites'), "ls","twitter/favorites/public" , "shell.callbacks.lsTweets");
+	}
+	
 	
 	// friends and followers
 	var friends_path   = shell.twitter_FS.join(path , 'friends');
@@ -220,5 +229,11 @@ shell.syscalls.mkdirHome = function(basedir , username){
 	shell.syscalls.mkdir(friends_path);
 	shell.syscalls.mkdir(followers_path);
 	shell.syscalls.mount(friends_path,   "ls","twitter/users/friends"   ,"shell.callbacks.lsUsers"); 
-	shell.syscalls.mount(followers_path, "ls","twitter/users/followers" ,"shell.callbacks.lsUsers"); 
+	shell.syscalls.mount(followers_path, "ls","twitter/users/followers" ,"shell.callbacks.lsUsers"); 	
+}
+
+// just to clean things out.
+shell.syscalls.mkdirAndMount = function(full_path , cmd , mount_point  , mount_callback){
+	shell.syscalls.mkdir(full_path);
+	shell.syscalls.mount(full_path, cmd , mount_point , mount_callback);
 }

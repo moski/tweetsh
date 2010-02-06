@@ -42,7 +42,7 @@ shell.parsers.Tweet = function(tweet){
 			out += '<a href="http://twitter.com/' + tweet['user']['screen_name']  + '/status/' + tweet['id'] + '" rel="bookmark" class="entry-date">';
 				out += '<span data="{time:\'' +  tweet['created_at'] + '\'" class="published timestamp">' + jQuery.relative_time(tweet['created_at']) +'</span>';
 			out += '</a>';
-			out += '<span> from ' + tweet['source'] + ' </span>';
+			out += '<span> from ' + jQuery.unescapeHTML(tweet['source']) + ' </span>';
 		out += '</span>';
 	out += '</span>';
 	out += '</li>';
@@ -51,6 +51,5 @@ shell.parsers.Tweet = function(tweet){
 }
 
 shell.parsers.Users = function(arr){
-	
 }
 

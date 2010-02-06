@@ -9,6 +9,26 @@ class Tweets
     end
   end
   
+  
+  def self.convertSearchResults2TweetsHash(search_results)
+    results = search_results['results']
+    converted = []
+    # Map the returned value in original user object reposnce, , missing few params but will do.
+    user_keys = {'profile_image_url' => 'profile_image_url' , 'from_user' => 'screen_name' , 'from_user_id' => 'id'}
+    results.each do |result|
+      h = {}
+      h['user'] = {}
+      user_keys.each do |key,val|
+        h['user'][val] = result[key] 
+        result.delete(key)
+      end
+      h.merge!(result)
+      converted << h
+    end
+    search_results.delete('results')
+    converted
+  end
+  
   # Convert the object to a json string
   def to_json(*a)
     {

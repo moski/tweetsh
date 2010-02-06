@@ -2,3 +2,11 @@
 
 
 3endi moshkeleh be shell.execStack , wain a7san ma7al to reset it !?!!!!
+
+
+Usful command to check the tcpdump:
+sudo tcpdump -i en1 -A -s 1024 -l  | tee dump.log | grep twitter
+
+
+
+post %r{/twitter/timelines/(user_timeline|friends_timeline|mentions|retweeted_by_me|retweeted_to_me|retweets_of_me)} do |action|
