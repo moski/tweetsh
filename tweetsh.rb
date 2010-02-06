@@ -180,6 +180,8 @@ post %r{/twitter/users/(friends|followers)} do |action|
   users.to_json
 end
 
+
+
 # store the request tokens and send to Twitter
 # PLEASE NOTE:
 # when running sinatra + thin ... when u call window.location.replace("/oauth/connect") using chrome, 

@@ -18,6 +18,8 @@ shell.std.cout = function (data, parser){
 		var parsed_data = (parser == null ? data : parser(data));	
 		shell.std.print(parsed_data);
 	}else{
+		shell.pipe.dataOnPipe = new dataOnPipe_struct(data, parser);
+		shell.exec();
 	}
 }
 

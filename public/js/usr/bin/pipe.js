@@ -19,6 +19,9 @@ shell.pipe.callQueue = new Array();
 /*  The output of each pipe is saved in the dataOnPipe var */
 shell.pipe.dataOnPipe = null;
 
+var dataOnPipe_struct  = jQuery.makeStruct("data parser");
+
+
 /*  Check if the Call queue is empty or not */
 shell.pipe.callQueueEmpty = function(){
 	return shell.pipe.callQueue.length == 0;

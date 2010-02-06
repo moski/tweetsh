@@ -131,8 +131,16 @@ shell.processInput = function(){
 	shell.exec();
 }
 shell.exec = function (){
+	shell.std.clog("a7aaaaaaaaaaaaaa");
+	
 	/* Get the command that i need to exectue **/
 	var command = shell.pipe.callQueueNext();
+	
+	
+	shell.std.clog("command == " + command);
+	
+	
+	
 	
     /*  Generate all the tokens.
 	 *  For example:  ls moski_doski ==> ['ls' , 'moski_doski']
