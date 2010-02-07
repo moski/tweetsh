@@ -33,14 +33,26 @@ shell.callbacks.lsUsers = function(data){
 }
 
 shell.callbacks.getUserTabCompletion = function(data){
-	shell.std.clog("in getUserTabCompletion opaaaaaaaaaaaa");
 	if(shell.twitter.errored(data)){
-		
+				
 	}else{
 		var user = data['data'];
 		shell.syscalls.mkdirHome(user['path'],user['screen_name']);
 		e = jQuery.Event("keydown");
 		e.keyCode = 9;
 		shell.UI.inputField.trigger(e);
+	}
+}
+
+
+// the callback after tweeting.
+shell.callbacks.tweet = function(data){
+	if(shell.twitter.errored(data)){
+		shell.errors.errindex = "GENERAL";
+		shell.std.cerr(" " + data['data'].error);
+		shell.prepareForNextCommand();
+	}else{
+		shell.std.cout(data['data'] , eval("shell.parsers." + data['json_class']));
+		shell.prepareForNextCommand();
 	}
 }

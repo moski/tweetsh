@@ -30,5 +30,10 @@ shell.twitter_FS.ACL_PRIVATE = 1;
 
 shell.twitter_FS.File_SEPARATOR = "/";
 
-var twitter_inode = jQuery.makeStruct("mode acl children parent name mount_to mount_ptr");
+var twitter_inode = jQuery.makeStruct("mode acl children parent name json_class mount_to mount_ptr");
 var mount_struct  = jQuery.makeStruct("mount_to mount_callback");
+
+
+twitter_inode.length = function(){
+	return this.name;
+}

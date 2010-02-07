@@ -1,6 +1,6 @@
 /*
- *  head.js
- *  head -- display first lines of a file/tweet
+ *  tail.js
+ *  tail -- display last lines of a file/tweet
  *  Copyright 2010 Monther. All rights reserved.
  *
  *  require 'inode.h.js'
@@ -8,10 +8,10 @@
  *  require 'commands.js'
  *  require 'iostream.js'
  */
-shell.command.head = function(){
-  this.name = "head";
-  this.aliases = new Array("head");
-  this.help = "display first lines of a file/tweet. ls /home/moski_doski/timelines/timeline | head -n 1";
+shell.command.tail = function(){
+  this.name = "tail";
+  this.aliases = new Array("tail");
+  this.help = "display the last part of a list of tweets. ls /home/moski_doski/timelines/timeline | tail ";
 
   this.errors = function(){
 	var error_arr 	= new Array();
@@ -24,10 +24,10 @@ shell.command.head = function(){
 	// Validate incoming input
 	if(!args || args.length == 0){
 		shell.errors.errindex = "HEAD_NOINPUT";
-		return this.fail(" -> example: ls /public_timeline | head ");
+		return this.fail(" -> example: ls /public_timeline | tail ");
 	}
 	
-	var count  = 5;	
+	var count  = 1;	
 	var data   = null;
 	var parser = null;
  	
@@ -48,7 +48,7 @@ shell.command.head = function(){
 		parser = data['parser'];
 		data = data['data'];
 	}
-	data = data.slice(0,count);
+	data = data.slice(data.length - count, data.length);
 	shell.std.cout(data , parser);
   }
 
@@ -57,4 +57,4 @@ shell.command.head = function(){
   }	
 
 }
-shell.commands.require("head")
+shell.commands.require("tail")

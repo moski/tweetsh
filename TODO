@@ -9,4 +9,5 @@ sudo tcpdump -i en1 -A -s 1024 -l  | tee dump.log | grep twitter
 
 
 
-post %r{/twitter/timelines/(user_timeline|friends_timeline|mentions|retweeted_by_me|retweeted_to_me|retweets_of_me)} do |action|
+TO see how many chars u used in ur last tweet:
+ls /home/moski_doski/timelines/timeline/ | head -n 1 | wc

@@ -86,7 +86,6 @@ shell.twitter_FS.filterChildren = function(children , str){
 	for(var i=0; i < children.length; i++){
 		var reg = new RegExp('\\b'+ str, 'gi');
 		if(reg.exec(children[i].name)){
-			shell.std.clog("pushing: " + children[i].name);
 			arr.push(children[i]);
 		}
 	}

@@ -27,9 +27,9 @@ shell.syscalls.mkdir = function(path){
 	}
 	
 	// Ok, @ this point the parent path exists
-	var node 		= new twitter_inode(shell.twitter_FS.MODE_DIR , shell.twitter_FS.ACL_PUBLIC , [] , parent  , shell.twitter_FS.basename(path) , mount_point);
-	var node_parent = new twitter_inode(shell.twitter_FS.MODE_DIR , shell.twitter_FS.ACL_PUBLIC , [] , node  , ".." , 3);
-	var node_self   = new twitter_inode(shell.twitter_FS.MODE_DIR , shell.twitter_FS.ACL_PUBLIC , [] , node  , "."  , 3);
+	var node 		= new twitter_inode(shell.twitter_FS.MODE_DIR , shell.twitter_FS.ACL_PUBLIC , [] , parent  , shell.twitter_FS.basename(path)  , 'Inode');
+	var node_parent = new twitter_inode(shell.twitter_FS.MODE_DIR , shell.twitter_FS.ACL_PUBLIC , [] , node  , ".." , 'Inode');
+	var node_self   = new twitter_inode(shell.twitter_FS.MODE_DIR , shell.twitter_FS.ACL_PUBLIC , [] , node  , "."   , 'Inode');
 	
 	// if we are creating the root node, then parent == node == root
 	if(path == "/"){

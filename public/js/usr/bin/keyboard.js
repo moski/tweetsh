@@ -61,7 +61,6 @@ shell.keyboard.upDownHistoryNav = function(keycode){
 }
 
 shell.keyboard.tabNav = function(){
-	shell.std.clog("inside tab nav");
 	var current_input = shell.UI.inputField.val();
 	var tokens = current_input.split(" ");
 	last = tokens.pop();
@@ -137,8 +136,6 @@ shell.keyboard.keyDownHandler = function(event){
   }
   // We are backspacing here...
   if(event && event.keyCode==9){
-	 shell.std.clog("keyDownHandler is being called again with tab keycode .. cool");
-	
 	event.cancelBubble=true;
     event.returnValue=false;
  	
@@ -153,7 +150,7 @@ shell.keyboard.keyDownHandler = function(event){
 	if(shell.keyboard.isDisplayCommands(cmd)){
 		shell.keyboard.autoCompletePath(cmd , current_cursor_pos , prev_pipe_pos);
 	}else{
-		shell.std.clog("commands " + cmd);
+		//shell.std.clog("commands " + cmd);
 	}
 	return false;
   }
@@ -215,7 +212,6 @@ shell.keyboard.autoCompletePath = function(cmd , current_cursor_pos , prev_pipe_
 // ["by_me" , "by_moski" , "by_random"] .. then the shortest common path is by_
 shell.keyboard.shortestName = function(children){
 	var strings = shell.twitter_FS.getNamesFromInodes(children);
-	shell.std.clog("string == " + strings);
 	var domi_index = strings[0].length
 	var expected_dom = true;
 	var st_index = 0;
@@ -254,6 +250,6 @@ shell.keyboard.updateCurrentInput = function(original_path ,matched , cmd_arr , 
 		cmd_arr.push(new_cmd);
 		shell.UI.RegReplaceInInput(cmd , cmd_arr.join(" "));
 	}else{
-		shell.std.clog("no matching .......");
+		//shell.std.clog("no matching .......");
 	}
 }

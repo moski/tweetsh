@@ -30,7 +30,6 @@ shell.command.ls = function(){
 	if(inode == shell.macros.FAIL){
 		this.fail();
 	}else if(inode == shell.macros.PENDING){
-		shell.std.clog("Inside ls Pending block where path ==  " + path);
 		return false;
 	}else{
 		this.porcess(inode);

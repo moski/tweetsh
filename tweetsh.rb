@@ -181,6 +181,12 @@ post %r{/twitter/users/(friends|followers)} do |action|
 end
 
 
+# Send a tweet
+post '/twitter/update' do
+  data = @client.update(params[:update])
+  tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new([data])
+  tweets.to_json
+end
 
 # store the request tokens and send to Twitter
 # PLEASE NOTE:
@@ -252,11 +258,6 @@ end
 get '/retweeted' do
   @tweets = @client.retweeted_by_me
   erb:timeline
-end
-
-post '/update' do
-  @client.update(params[:update])
-  redirect '/timeline'
 end
 
 get '/messages' do
