@@ -1,7 +1,6 @@
 /*
  *  inode.h.js
  *  Define the strcutre for the inode blocks
- *  Copyright 2010 Monther. All rights reserved.
  *	
  */
 

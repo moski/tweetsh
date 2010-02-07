@@ -1,7 +1,6 @@
 /*
  *  pwd.js
  *  Find the current working directory
- *  Copyright 2010 Monther. All rights reserved.
  *
  *  require 'inode.h.js'
  *  require 'shell.h.js'

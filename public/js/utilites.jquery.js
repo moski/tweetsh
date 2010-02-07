@@ -1,7 +1,6 @@
 /*
  *  utilities.jquery.js
  *  Contains helpful function built on top of jquery
- *  Copyright 2010 Monther. All rights reserved.
  *
  */
 jQuery.isValueIncludedInArray =  function(value, array) {

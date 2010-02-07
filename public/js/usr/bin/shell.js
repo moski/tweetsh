@@ -1,7 +1,6 @@
 /*
  *  shell.js
  *  Contains the main stuff required to interact with the shell.
- *  Copyright 2010 Monther. All rights reserved.
  *	 
  *   require 'shell.h.js'
  *   require 'keyboard.js'

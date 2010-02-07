@@ -1,7 +1,6 @@
 /*
  *  parsers.js
  *  Define all the parsers used in shell.std.cout
- *  Copyright 2010 Monther. All rights reserved.
  *	 
  *   require 'shell.h.js'
  *   	

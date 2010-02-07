@@ -1,7 +1,6 @@
 /*
  *  syscalls.js
  *  Define the most important operation in system
- *  Copyright 2010 Monther. All rights reserved.
  *
  *  require 'inode.h.js'	
  */

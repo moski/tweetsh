@@ -1,7 +1,6 @@
 /*
  *  shell.h.js
  *  Contains all the common vars/defintion requried across the shell app.
- *  Copyright 2010 Monther. All rights reserved.
  *	
  */
 var shell = new Object();

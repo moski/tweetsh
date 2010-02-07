@@ -1,7 +1,6 @@
 /*
  *  clear.js
  *  clears the screen
- *  Copyright 2010 Monther. All rights reserved.
  *	 
  *   require 'shell.h.js'
  *   require 'commands.js'

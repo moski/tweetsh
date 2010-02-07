@@ -2,7 +2,6 @@
  *  commands.js
  *  controls the commands structure, every command must be required here before we can
  *  use it.
- *  Copyright 2010 Monther. All rights reserved.
  *	 
  *   require 'shell.h.js'
  *   	

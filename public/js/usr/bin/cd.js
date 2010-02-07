@@ -1,7 +1,6 @@
 /*
  *  cd.js
  *  change the current working directory
- *  Copyright 2010 Monther. All rights reserved.
  *	 
  *   require 'shell.h.js'
  *   require 'commands.js'

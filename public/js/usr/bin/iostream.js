@@ -1,7 +1,6 @@
 /*
  *  iostream.js
  *  Maintains a refernce to the current input/output stream.
- *  Copyright 2010 Monther. All rights reserved.
  *	 
  *   require 'shell.h.js'
  *   require 'keyboard.js'

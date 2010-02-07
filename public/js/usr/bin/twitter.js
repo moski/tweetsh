@@ -1,7 +1,6 @@
 /*
  *  twitter.js
  *  Deals with the twitter data(parse json ... etc)
- *  Copyright 2010 Monther. All rights reserved.
  *	
  */
 

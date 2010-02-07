@@ -1,7 +1,6 @@
 /*
  *  exit.js
  *  Authenticate the user.
- *  Copyright 2010 Monther. All rights reserved.
  *
  *  require 'inode.h.js'
  *  require 'shell.h.js'

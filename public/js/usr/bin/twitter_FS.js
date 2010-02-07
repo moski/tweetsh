@@ -1,7 +1,6 @@
 /*
  *  twitter_FS.js
  *  The core of the file structure used on top of twitter
- *  Copyright 2010 Monther. All rights reserved.
  *
  *  require 'inode.h.js'	
  */

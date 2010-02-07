@@ -1,7 +1,6 @@
 /*
  *  callbacks.js
  *  Define the callbacks for the ajax request
- *  Copyright 2010 Monther. All rights reserved.
  *
  *  require 'inode.h.js'	
  */

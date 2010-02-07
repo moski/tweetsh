@@ -1,7 +1,6 @@
 /*
  *  pipe.js
  *  Contains the main stuff required for piping.
- *  Copyright 2010 Monther. All rights reserved.
  *	 
  *   require 'shell.h.js'
  *   	
