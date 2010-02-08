@@ -1,0 +1,46 @@
+<div class="welcome" >
+	<h1>Tweetsh: A Shell interface for twitter.</h1>
+	<div class="intro">
+		<p class="lh13">
+			Tweetsh is a shell interface for twitter written in javascript.
+			it tries to map the commands you use everyday on the shell to interact 
+			with twitter. It behaves similar to a unix-shell.You type commands and 
+			the results are shown on this page. 
+			<br/><br/>
+			
+			Tweetsh is an <a target="_blank" href="http://github.com/moski/tweetsh">open source</a> project 
+			under the MIT license.
+			
+			<br/><br/>
+			<pre>
+/(root)
+|-home <span class="cool"> (mounted into twitter users folder) </span>
+|---moski_doski
+|------timeline
+|----------timeline
+|----------personal <span class="cool">=> Only logged in. This is your HOME timeline</span>      
+|------mentions     <span class="cool">=> Example, "ls /home/google/mentions | tail" </span> 
+|------retweets     <span class="cool">=> Only logged in</span>   
+|----------by_me
+|----------of_me
+|----------to_me
+|------favorites
+|------friends      <span class="cool">=> Callback UI is not ready yet ;( </span> 
+|------followers
+|---rails
+|---Google
+|---*.* users
+</pre>
+
+<b>Notes:</b>
+<ul class="notes">
+<li><b>Tab Completion</b>: "/home" by default doesn't have a tab completion until the user is validated so <span class="code">cd /home</span> then "tab" will do nothing but <span class="code">cd /home/moski_doski/../</span> then <span class="code">ls /home/mo</span> "tab" will show you moski_doski in home folder because its been populated from twitter.</li>
+
+<li><b>Piping</b>: Most commands support piping, but few commands don't. For example the "cd" command doesn't support piping because it has no output. Nested piping is also possible. For example to check my how many words i've used in my last 10 tweets i can do the following  <span class="code">ls /home/moski_doski/timelines/timeline | head -n 10 | wc -w </span>
+</li>
+
+
+</ul>
+	</p>
+	</div>
+</div>

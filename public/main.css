@@ -157,3 +157,43 @@ ol.statuses span.status-body {
 	margin-top:2px;
 }
 
+
+.welcome{
+	margin-left:8px;
+	margin-top:20px;
+	width:700px;
+}
+
+.welcome h1 {
+	color:#CCCCCC;
+	font-family:courier,fixed,swiss,sans-serif;
+	font-size:16px;
+}
+.lh13 {
+	line-height:13px;
+	color:#CCCCCC;
+	font-family:courier,fixed,swiss,sans-serif;
+	font-size:12px;	
+}
+
+pre {
+	color:#CCFFAA;
+	font-family:courier,fixed,swiss,sans-serif;
+	font-size:12px;
+	line-height:15px;
+}
+
+
+span.cool{
+	color:#CCCCCC;
+}
+
+span.code{
+	color:#CCFFAA;
+}
+
+
+ul.notes li {
+	line-height:13px;
+	padding-bottom:6px;
+}

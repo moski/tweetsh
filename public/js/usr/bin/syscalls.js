@@ -99,7 +99,8 @@ shell.syscalls.DIRGlob = function(name , folderInode , callback){
 		return folderInode;
 	}
 	for(var i=0; i < folderInode.children.length; i++){
-		if(folderInode.children[i].name == name){
+		// make sure we ignore the case when comparing
+		if(folderInode.children[i].name.toLowerCase()  == name.toLowerCase()){
 			return folderInode.children[i];
 		}
 	}

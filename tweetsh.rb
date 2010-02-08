@@ -13,16 +13,11 @@ require 'lib/authentication'
 require 'json'
 
 # A simple wrapper class to the json string coming from twitter.
-require 'wrappers/base'
-require 'wrappers/user'
-require 'wrappers/users'
-require 'wrappers/tweet'
-require 'wrappers/tweets'
+Dir["wrappers/*.rb"].each {|r| require r}
+
 
 # Extend the twitter_oauth library by adding few more functions to the Client class
-require 'lib/extend/twitter_oauth/user'
-require 'lib/extend/twitter_oauth/search'
-require 'lib/extend/twitter_oauth/favorites'
+Dir["lib/extend/twitter_oauth/*.rb"].each {|r| require r}
 
 
 # Set the Mime-type for json
@@ -153,7 +148,6 @@ post %r{/twitter/favorites/(public|private)} do |action|
   # Set the screen_name if its a public call.
   options[:screen_name] = screen_name unless screen_name.nil? && action == 'public'
   
-  
   data   = @client.send("favorites" ,  options)
   tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(data)
   
@@ -238,6 +232,12 @@ get '/oauth/disconnect' do
 end
 
 
+helpers do 
+  def partial(name, options={})
+    erb("_#{name.to_s}".to_sym, options.merge(:layout => false))
+  end
+end
+
 ######################### experimental ############################
 =begin
 get '/timeline' do
@@ -272,8 +272,3 @@ get '/search' do
   erb :search
 end
 =end
-#helpers do 
-#  def partial(name, options={})
-#    erb("_#{name.to_s}".to_sym, options.merge(:layout => false))
-#  end
-#end
