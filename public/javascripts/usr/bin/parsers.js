@@ -51,7 +51,6 @@ shell.parsers.Tweet = function(tweet){
 
 shell.parsers.Users = function(arr){
 	var out = '<ul class="friends_dir">';
-	shell.std.clog( arr['users'].length);
 	for(var i=0; i < arr['users'].length; i++){
 		if(arr['users'][i]['data']['screen_name'] != '.' && arr['users'][i]['data']['screen_name']  != '..'){
 			out += '<li class="friend_dir">';
