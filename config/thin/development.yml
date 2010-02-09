@@ -1,0 +1,12 @@
+---
+   environment: development
+   chdir: /Users/moski/Sites/personal/twitter/tweetsh_sinatra
+   address: 127.0.0.1
+   port: 4567
+   pid: /Users/moski/Sites/personal/twitter/tweetsh_sinatra/tmp/thin.pid
+   rackup: /Users/moski/Sites/personal/twitter/tweetsh_sinatra/config.ru
+   log: /Users/moski/Sites/personal/twitter/tweetsh_sinatra/log/thin.log
+   max_conns: 1024
+   timeout: 30
+   max_persistent_conns: 512
+   daemonize: false
