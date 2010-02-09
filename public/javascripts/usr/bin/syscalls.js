@@ -237,3 +237,8 @@ shell.syscalls.mkdirAndMount = function(full_path , cmd , mount_point  , mount_c
 	shell.syscalls.mkdir(full_path);
 	shell.syscalls.mount(full_path, cmd , mount_point , mount_callback);
 };
+
+shell.syscalls.ln = function(source , destination){
+	source.link_to = destination;
+}
+

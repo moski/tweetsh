@@ -57,6 +57,7 @@ fieldset, img {
 #output {
 	margin-left:8px;
 	margin-top:8px;
+	width:850px;
 }
 
 #output .sexy{
@@ -213,4 +214,19 @@ table.help{
 
 .help_header {
 	background-color:#2786C2;
+}
+
+
+ul.friends_dir{
+	width:100%;
+	list-style-image:none;
+	list-style-position:outside;
+	list-style-type:none;
+}
+
+ul.friends_dir li{
+	float:left;
+	padding-right:30px;
+	padding-bottom:10px;
+	width:70px;
 }

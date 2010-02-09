@@ -50,5 +50,19 @@ shell.parsers.Tweet = function(tweet){
 };
 
 shell.parsers.Users = function(arr){
+	var out = '<ul class="friends_dir">';
+	shell.std.clog( arr['users'].length);
+	for(var i=0; i < arr['users'].length; i++){
+		if(arr['users'][i]['data']['screen_name'] != '.' && arr['users'][i]['data']['screen_name']  != '..'){
+			out += '<li class="friend_dir">';
+				out += '<a class="tweet-url profile-pic url" href="http://twitter.com/' + arr['users'][i]['data']['screen_name'] + '">';
+					out += '<img width="48" height="48" src="' + arr['users'][i]['data']['profile_image_url'] + '" class="photo fn" alt="' + arr['users'][i]['data']['name'] + '">';
+					out += "<br/>" + arr['users'][i]['data']['screen_name'];
+				out += '</a>';
+			out += '</li>';	
+		}
+	}
+	out += '</ul>';
+	return out;
 };
 
