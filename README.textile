@@ -1,0 +1,2 @@
+sudo gem install sinatra --pre
+sudo gem install sinatra-bundles

@@ -19,9 +19,25 @@ Dir["wrappers/*.rb"].each {|r| require r}
 # Extend the twitter_oauth library by adding few more functions to the Client class
 Dir["lib/extend/twitter_oauth/*.rb"].each {|r| require r}
 
+# Asset packger configuration
+# I tried to package the js files using Dir["public/js/**/*.js"] but i had an issue with the ordering, some files
+# has to be included before others.
+# this will do for now
+require 'sinatra/bundles'
+stylesheet_bundle(:all, %w(main))
+javascript_bundle(:all, 
+['usr/include/shell.h', 'utilites.jquery', 'usr/bin/keyboard','usr/bin/shell', 'usr/bin/commands',  
+ 'usr/bin/pipe', 'usr/bin/iostream', 'usr/bin/clear', 'usr/include/inode.h', 'usr/bin/twitter_FS',
+ 'usr/bin/syscalls', 'usr/bin/pwd', 'usr/bin/cd', 'usr/bin/callbacks', 'usr/bin/twitter', 
+ 'usr/bin/ls', 'usr/bin/parsers', 'usr/bin/ssh' , 'usr/bin/exit', 'usr/bin/head', 
+ 'usr/bin/tail', 'usr/bin/wc', 'usr/bin/wall', "usr/bin/man"])
+
 
 # Set the Mime-type for json
-mime :json, "application/json"
+# NOTE: (invalid syntax) after upgrading to sintra 1.0 a .. but seems everthing
+#       is still working fine
+#mime :json, "application/json"
+
 
 # Enable sessions and Load the Conf file.
 configure do
