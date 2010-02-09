@@ -30,7 +30,7 @@ javascript_bundle(:all,
  'usr/bin/pipe', 'usr/bin/iostream', 'usr/bin/clear', 'usr/include/inode.h', 'usr/bin/twitter_FS',
  'usr/bin/syscalls', 'usr/bin/pwd', 'usr/bin/cd', 'usr/bin/callbacks', 'usr/bin/twitter', 
  'usr/bin/ls', 'usr/bin/parsers', 'usr/bin/ssh' , 'usr/bin/exit', 'usr/bin/head', 
- 'usr/bin/tail', 'usr/bin/wc', 'usr/bin/wall', "usr/bin/man"])
+ 'usr/bin/tail', 'usr/bin/wc', 'usr/bin/wall', "usr/bin/man" , "usr/bin/reverse"])
 
 # Set the Mime-type for json
 # NOTE: (invalid syntax) after upgrading to sintra 1.0 a .. but seems everthing

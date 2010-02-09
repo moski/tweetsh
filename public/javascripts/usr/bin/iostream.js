@@ -16,11 +16,20 @@ shell.std.cout = function (data, parser){
 	if (shell.pipe.callQueueEmpty()){
 		var parsed_data = (parser == null ? data : parser(data));	
 		shell.std.print(parsed_data);
+		shell.prepareForNextCommand();
 	}else{
 		shell.pipe.dataOnPipe = new dataOnPipe_struct(data, parser);
 		shell.exec();
 	}
 };
+
+shell.std.coutWithQueueByPass =  function (data, parser){
+	var parsed_data = (parser == null ? data : parser(data));	
+	shell.std.print(parsed_data);
+}
+
+
+
 
 shell.std.echoInput = function (){
 	var out = "<div class='input sexy'><span class=''>";

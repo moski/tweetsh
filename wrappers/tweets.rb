@@ -4,7 +4,7 @@ class Tweets
   
   def initialize(tweets=[])
     @tweets = []
-    tweets.each do |tweet|
+    tweets.reverse_each do |tweet|
       @tweets << Tweet.new(tweet)
     end
   end
@@ -15,7 +15,7 @@ class Tweets
     converted = []
     # Map the returned value in original user object reposnce, , missing few params but will do.
     user_keys = {'profile_image_url' => 'profile_image_url' , 'from_user' => 'screen_name' , 'from_user_id' => 'id'}
-    results.each do |result|
+    results.reverse_each do |result|
       h = {}
       h['user'] = {}
       user_keys.each do |key,val|

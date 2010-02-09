@@ -195,7 +195,7 @@ shell.keyboard.autoCompletePath = function(cmd , current_cursor_pos , prev_pipe_
 		}else{
 			var shortest_name = shell.keyboard.shortestName(matched);
 			shell.keyboard.updateCurrentInput(original_path ,shortest_name , cmd_arr , cmd , false);
-			shell.std.cout(matched, shell.parsers.inodeArray);	
+			shell.std.coutWithQueueByPass(matched, shell.parsers.inodeArray);	
 			shell.std.print("<br/>");
 		}
 	}

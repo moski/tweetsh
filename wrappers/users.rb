@@ -5,7 +5,7 @@ class Users
   
   def initialize(data)
     @users = []
-    data['users'].each do |user|
+    data['users'].reverse_each do |user|
       @users << User.new(user)
     end
     

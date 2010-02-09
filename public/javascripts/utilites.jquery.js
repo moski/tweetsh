@@ -177,3 +177,6 @@ function rtrim(text) {
 jQuery.unescapeHTML = function(html){
 	return $("<div>"+html+"</div>").text();
 };
+
+
+String.prototype.reverse=function(){return this.split("").reverse().join("");}
