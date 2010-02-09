@@ -26,9 +26,7 @@ shell.std.cout = function (data, parser){
 shell.std.coutWithQueueByPass =  function (data, parser){
 	var parsed_data = (parser == null ? data : parser(data));	
 	shell.std.print(parsed_data);
-}
-
-
+};
 
 
 shell.std.echoInput = function (){
