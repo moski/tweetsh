@@ -104,7 +104,7 @@ shell.UI.prepareForNextCommand = function(){
   	shell.UI.inputField.val('');
 
   	shell.UI.focusCursor();
-//	shell.UI.scrollToCursor();
+	shell.UI.scrollToCursor();
 	
 	
 	shell.UI.unlockInput();
