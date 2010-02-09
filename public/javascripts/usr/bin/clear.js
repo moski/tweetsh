@@ -16,11 +16,11 @@ shell.command.clear = function(){
   // no errors, just clear the frakkin screen ...	
   this.errors = function(){
   	return [];
-  }
+  };
 
   this.call = function(args){
   	shell.std.clear();
 	shell.prepareForNextCommand();
-  }
-}
+  };
+};
 shell.commands.require("clear");

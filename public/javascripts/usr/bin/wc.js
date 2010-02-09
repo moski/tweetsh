@@ -17,7 +17,7 @@ shell.command.wc = function(){
 	error_arr["HEAD_NOINPUT"] = "requires an input";
 	error_arr["HEAD_NOPTION"]   = "option require an argument";
 	return error_arr;
-  }
+  };
   
   this.call = function(args){
 	// Validate incoming input
@@ -52,11 +52,11 @@ shell.command.wc = function(){
 	
 	(sw == 0) ? this.charCount(data) : this.wordCount(data);
   	return true;
-  }
+  };
 
   this.fail = function(msg){
 	shell.std.cerr(msg);
-  }
+  };
   
   // print the number of chars	
   this.charCount = function(data){
@@ -70,7 +70,7 @@ shell.command.wc = function(){
 	}
 	shell.std.cout(count);
 	return true;
-  }
+  };
  
   // get the length depending on the object type.
   this.charCountHelper = function(value){
@@ -81,7 +81,7 @@ shell.command.wc = function(){
 		count += value.name.length;
 	 }
 	 return count;
-  }
+  };
   	
   this.wordCount = function(data){
 	var count = 0;
@@ -94,7 +94,7 @@ shell.command.wc = function(){
 	}
 	shell.std.cout(count);
 	return true;
-  }
+  };
 
   // get the words count depending on the object type.
   this.wordCountHelper = function(value){
@@ -105,6 +105,6 @@ shell.command.wc = function(){
 		count += value.name.split(" ").length;
 	 }
 	 return count;
-  }	
-}
-shell.commands.require("wc")
+  };	
+};
+shell.commands.require("wc");

@@ -35,4 +35,4 @@ var mount_struct  = jQuery.makeStruct("mount_to mount_callback");
 
 twitter_inode.length = function(){
 	return this.name;
-}
+};

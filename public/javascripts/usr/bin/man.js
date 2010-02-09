@@ -19,7 +19,7 @@ shell.command.man = function(){
 	var error_arr 	= new Array();	
 	error_arr["MAN_NOCOMMAND"] = "command not found";
 	return error_arr;
-  }
+  };
   
   this.call = function(args){
   	 this.help = "displays help text";
@@ -36,12 +36,12 @@ shell.command.man = function(){
      
      var out = this.drawHelp(args);
   	 shell.std.cout(out);
-  }
+  };
   
   //
   this.fail = function(msg){
 	shell.std.cerr(msg);
-  }
+  };
 
   this.drawHelp = function(args){
 	var module;
@@ -87,6 +87,6 @@ shell.command.man = function(){
     	out += "<br/>";
     }
     return out;
-  }
-}
+  };
+};
 shell.commands.require("man");

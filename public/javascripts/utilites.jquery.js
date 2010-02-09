@@ -21,7 +21,7 @@ jQuery.ArrayRemoveElement =  function(array , element) {
 	array = jQuery.grep(array, function(value) {
 	        return value != element;
 	});
-	return array
+	return array;
 };
 
 /* copy associative array. 
@@ -46,7 +46,7 @@ jQuery.makeStruct = function(names) {
     }
   }
   return constructor;
-}
+};
 
 
 jQuery.ify = function() {
@@ -81,7 +81,7 @@ jQuery.ify = function() {
 
 jQuery.hrefNewWindow = function(str){
 	return str.replace(/<a href/gi, '<a target="_blank" href');
-}
+};
 
 jQuery.relative_time = function(time_value) {
     var values = time_value.split(" "),
@@ -165,16 +165,15 @@ jQuery.relative_time = function(time_value) {
     }
 
     return r;
-}
-
+};
 
 function ltrim(text) {
     return text.replace(/^\s+/g, "");
-}
+};
 function rtrim(text) {
     return text.replace(/\s+$/g, "");
-}
+};
 
 jQuery.unescapeHTML = function(html){
 	return $("<div>"+html+"</div>").text();
-}
+};

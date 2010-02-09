@@ -26,7 +26,7 @@ shell.keyboard.saveCurrentInput = function(){
     else{
 		shell.keyboard.historyTemp = shell.UI.inputField.val();	
     }
-}
+};
 
 
 // Deals with the up/down history navigation.
@@ -57,7 +57,7 @@ shell.keyboard.upDownHistoryNav = function(keycode){
       else 
 		shell.UI.inputField.val(shell.keyboard.historyTemp);
     }
-}
+};
 
 shell.keyboard.tabNav = function(){
 	var current_input = shell.UI.inputField.val();
@@ -89,7 +89,7 @@ shell.keyboard.tabNav = function(){
 			//@TODO: Deal with shell.std.cout
 		}
 	}
-}
+};
 
 // Handel keyboard events
 // NOTEs:
@@ -115,7 +115,7 @@ shell.keyboard.mcursor = function(e){
   if(keycode==13){
     shell.processInput();
   }
-}
+};
 
 
 shell.keyboard.addNewCommandToHistory = function(cmd){
@@ -123,8 +123,17 @@ shell.keyboard.addNewCommandToHistory = function(cmd){
     	shell.keyboard.history[shell.keyboard.history.length] = cmd;
     	shell.keyboard.historyPos = shell.keyboard.history.length;
   	}
-}
+};
 
+shell.keyboard.getLatestCommandFromInput = function(){
+	var input = shell.UI.inputField.val();
+	
+	// Get the last command from the input field
+	// So if the cmd == "ls moski_doski | grep hello"
+	// the command will be grep hello
+	var cmd = input.split("|").pop();
+	return ltrim(cmd);
+};
 
 shell.keyboard.keyDownHandler = function(event){
   if(!event&&window.event) {
@@ -148,30 +157,16 @@ shell.keyboard.keyDownHandler = function(event){
 	var cmd = input.substring(prev_pipe_pos,current_cursor_pos);
 	if(shell.keyboard.isDisplayCommands(cmd)){
 		shell.keyboard.autoCompletePath(cmd , current_cursor_pos , prev_pipe_pos);
-	}else{
-		//shell.std.clog("commands " + cmd);
 	}
 	return false;
   }
-}
-
-shell.keyboard.getLatestCommandFromInput = function(){
-	var input = shell.UI.inputField.val();
-	
-	// Get the last command from the input field
-	// So if the cmd == "ls moski_doski | grep hello"
-	// the command will be grep hello
-	var cmd = input.split("|").pop();
-	cmd = ltrim(cmd);
-	return cmd;
-}
-
+};
 
 // Given the current command, decide if the tab should display the list of command
 // or it should list the files/folders in the current directory
 shell.keyboard.isDisplayCommands = function(cmd){
 	return (cmd.split(" ").length > 1);
-}
+};
 
 shell.keyboard.autoCompletePath = function(cmd , current_cursor_pos , prev_pipe_pos){
 	var cmd_arr = cmd.split(" ");
@@ -204,14 +199,14 @@ shell.keyboard.autoCompletePath = function(cmd , current_cursor_pos , prev_pipe_
 			shell.std.print("<br/>");
 		}
 	}
-}
+};
 
 // Get the shortest name so we can tab to it.
 // for example , if the folder contains the following subfolders ..
 // ["by_me" , "by_moski" , "by_random"] .. then the shortest common path is by_
 shell.keyboard.shortestName = function(children){
 	var strings = shell.twitter_FS.getNamesFromInodes(children);
-	var domi_index = strings[0].length
+	var domi_index = strings[0].length;
 	var expected_dom = true;
 	var st_index = 0;
 
@@ -234,7 +229,7 @@ shell.keyboard.shortestName = function(children){
 	}else{
 		return null;
 	}
-}
+};
 
 shell.keyboard.updateCurrentInput = function(original_path ,matched , cmd_arr , cmd , match_one){
 	var tmp = shell.twitter_FS.dirname(original_path,matched);
@@ -248,7 +243,5 @@ shell.keyboard.updateCurrentInput = function(original_path ,matched , cmd_arr , 
 		new_cmd = (match_one == true) ? (new_cmd + "/") : new_cmd;
 		cmd_arr.push(new_cmd);
 		shell.UI.RegReplaceInInput(cmd , cmd_arr.join(" "));
-	}else{
-		//shell.std.clog("no matching .......");
 	}
-}
+};

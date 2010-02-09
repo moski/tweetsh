@@ -1,2 +1,7 @@
 sudo gem install sinatra --pre
 sudo gem install sinatra-bundles
+
+
+
+# To start the server
+thin -C config/thin/development.yml -R config.ru start

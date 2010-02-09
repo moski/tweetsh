@@ -16,6 +16,6 @@ shell.module = function (ns){
 
 	root = root[parts[i]];
   }
-}
+};
 
 

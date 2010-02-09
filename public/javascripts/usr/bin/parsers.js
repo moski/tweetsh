@@ -16,7 +16,7 @@ shell.parsers.inodeArray = function(arr){
 		}
 	}
 	return out;
-}
+};
 
 shell.parsers.Tweets = function(arr){
 	var out = '<ol class="statuses" id="timeline">';
@@ -27,13 +27,13 @@ shell.parsers.Tweets = function(arr){
 	}
 	out += '</ol>';
 	return out;
-}
+};
 
 
 shell.parsers.Tweet = function(tweet){
 	var out = '<li id="status_' + tweet['id'] + '" class="hentry u-toot status">';
 	out += '<span class="thumb vcard author"><a class="tweet-url profile-pic url" href="http://twitter.com/' + tweet['user']['screen_name'] + '">';
-	out += '<img width="48" height="48" src="' + tweet['user']['profile_image_url'] + '" class="photo fn" alt="' + tweet['user']['name'] + '"></a></span>'
+	out += '<img width="48" height="48" src="' + tweet['user']['profile_image_url'] + '" class="photo fn" alt="' + tweet['user']['name'] + '"></a></span>';
 	out += '<span class="status-body"><strong><a title="' + tweet['user']['name'] + '" class="tweet-url screen-name" href="http://twitter.com/' + tweet['user']['screen_name'] + '">';
 		out += tweet['user']['screen_name'] + "</a></strong>"; 
 		out += ' <span class="entry-content">' +  jQuery.ify.clean(tweet['text']) + '</span>';
@@ -47,8 +47,8 @@ shell.parsers.Tweet = function(tweet){
 	out += '</li>';
 	out = jQuery.hrefNewWindow(out);
 	return out;
-}
+};
 
 shell.parsers.Users = function(arr){
-}
+};
 

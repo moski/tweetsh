@@ -45,7 +45,7 @@ shell.syscalls.mkdir = function(path){
 		node.children.push(node_parent);
 		node.children.push(node_self);
 	}
-}
+};
 
 /* Given the path, return the inode object for path **/
 shell.syscalls.path2Inode = function(path , callback){
@@ -74,7 +74,7 @@ shell.syscalls.path2Inode = function(path , callback){
 		}
 	}
 	return current;
-}
+};
 
 /* Given the inode , give me the fullpath **/
 shell.syscalls.inode2Path = function(inode){
@@ -86,9 +86,9 @@ shell.syscalls.inode2Path = function(inode){
 		current = current.parent;
 	}
 	// reverse the array because we travered backwardly
-	path = path.reverse()
+	path = path.reverse();
 	return "/" + path.join("/");
-}
+};
 
 /* Return a file in a given folder **/
 shell.syscalls.DIRGlob = function(name , folderInode , callback){
@@ -129,16 +129,16 @@ shell.syscalls.DIRGlob = function(name , folderInode , callback){
 	
 	shell.errors.errindex = "ENOTDIR";
 	return shell.macros.FAIL;
-}
+};
 
 /* return working directory name **/
 shell.syscalls.getPWD = function(){
 	return shell.syscalls.inode2Path(shell.twitter_FS.cwd);
-}
+};
 
 /* change the current working dir into the given path **/
 shell.syscalls.chdir = function(path){
-	var node = null
+	var node = null;
 	if(path == "-"){	
 		node = shell.twitter_FS.cwdOld;
 	}else{
@@ -158,7 +158,7 @@ shell.syscalls.chdir = function(path){
 		}
 	}
 	return shell.macros.FAIL;
-}
+};
 
 /* Mount folder to interact with twitter + localfile structure.
    cd				--> cammdn
@@ -173,7 +173,7 @@ shell.syscalls.chdir = function(path){
    I honstely couldn't think of any better/cleaner way of doing this.
 **/
 shell.syscalls.mount = function (path, cmd , mount_point, mount_callback){
-	var node = shell.syscalls.path2Inode(path)
+	var node = shell.syscalls.path2Inode(path);
 	if (node == shell.macros.FAIL){
 		return node;
 	} 
@@ -183,7 +183,7 @@ shell.syscalls.mount = function (path, cmd , mount_point, mount_callback){
 	}
 	node.mount_ptr[cmd] = mount_st;
 	return shell.macros.PASS;
-}
+};
 
 shell.syscalls.mkdirHome = function(basedir , username){
 	// home folder
@@ -199,14 +199,14 @@ shell.syscalls.mkdirHome = function(basedir , username){
 	// [/home/USER/timelines/]
 	var timelines = shell.twitter_FS.join(path , 'timelines');
 	shell.syscalls.mkdir(timelines);
-	shell.syscalls.mkdirAndMount(shell.twitter_FS.join(timelines , 'timeline') , "ls" ,"twitter/timelines/user_timeline","shell.callbacks.lsTweets")
+	shell.syscalls.mkdirAndMount(shell.twitter_FS.join(timelines , 'timeline') , "ls" ,"twitter/timelines/user_timeline","shell.callbacks.lsTweets");
 	
 	
 	
 	// If i am building my own homeDir
 	if(shell.twitter.loggedIn() && shell.config.user == username){
-		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(timelines , 'personal') , "ls" ,"twitter/timelines/home_timeline","shell.callbacks.lsTweets")
-		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(path , 'mentions') , "ls" ,"twitter/mentions","shell.callbacks.lsTweets")
+		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(timelines , 'personal') , "ls" ,"twitter/timelines/home_timeline","shell.callbacks.lsTweets");
+		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(path , 'mentions') , "ls" ,"twitter/mentions","shell.callbacks.lsTweets");
 		
 		// retweets
 		var retweets  	  = shell.twitter_FS.join(path , 'retweets');
@@ -218,7 +218,7 @@ shell.syscalls.mkdirHome = function(basedir , username){
 		// fav/personal
 		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(path , 'favorites'), "ls","twitter/favorites/private" , "shell.callbacks.lsTweets");
 	}else{
-		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(path , 'mentions') , "ls" ,"twitter/public_mentions","shell.callbacks.lsTweets")
+		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(path , 'mentions') , "ls" ,"twitter/public_mentions","shell.callbacks.lsTweets");
 		shell.syscalls.mkdirAndMount(shell.twitter_FS.join(path , 'favorites'), "ls","twitter/favorites/public" , "shell.callbacks.lsTweets");
 	}
 	
@@ -230,10 +230,10 @@ shell.syscalls.mkdirHome = function(basedir , username){
 	shell.syscalls.mkdir(followers_path);
 	shell.syscalls.mount(friends_path,   "ls","twitter/users/friends"   ,"shell.callbacks.lsUsers"); 
 	shell.syscalls.mount(followers_path, "ls","twitter/users/followers" ,"shell.callbacks.lsUsers"); 	
-}
+};
 
 // just to clean things out.
 shell.syscalls.mkdirAndMount = function(full_path , cmd , mount_point  , mount_callback){
 	shell.syscalls.mkdir(full_path);
 	shell.syscalls.mount(full_path, cmd , mount_point , mount_callback);
-}
+};

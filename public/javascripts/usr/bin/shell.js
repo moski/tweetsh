@@ -11,7 +11,7 @@
 shell.initialize = function(current_user){
 	shell.twitter_FS.initialize(current_user);
 	shell.UI.initialize();
-}
+};
 
 /* Define all the configurtion needed for shell to work. **/
 shell.module("shell.config");
@@ -46,14 +46,14 @@ shell.UI.initialize = function(){
 	shell.UI.focusCursor();
 	
 	jQuery.ajaxSetup({ 'beforeSend': shell.UI.lockInput });
-}
+};
 
 shell.UI.hookEvents = function(){
   shell.UI.inputField.keyup(function(event)   { return shell.keyboard.mcursor(event); });
   shell.UI.bodyElement.focus(function(event)  { return shell.UI.focusCursor(event); });
   shell.UI.bodyElement.click(function(event)  { return shell.UI.focusCursor(event); }); 
   shell.UI.inputField.keydown(function(event){ return shell.keyboard.keyDownHandler(event); }); 
-}
+};
 
 /*  give the current input the cursor focus */
 shell.UI.focusCursor = function(){
@@ -65,38 +65,38 @@ shell.UI.focusCursor = function(){
     document.f.q.value = document.f.q.value; // for safari
     if(shell.UI.inputElement.css("display") != "none") document.f.q.focus();
   }
-}
+};
 
 /* Scroll the window to the input cursor */
 shell.UI.scrollToCursor = function(){
   var pos = shell.UI.inputField.position();
   window.scrollBy(pos.left,pos.top - 10);	
-}
+};
 shell.UI.scroll = function(){
   window.scrollBy(0, 122500);
-}
+};
 
 /* Setters and getters for prompt **/
 shell.UI.getPrompt = function(){
 	return shell.UI.promptElement.html();
-}
+};
 shell.UI.setPrompt = function(){
 	//var html = shell.config.user +  '@twitter.com:' + tweetShell.helperGUI.generatePWD() + '>';
 	var html = shell.config.user +  '@twitter.com:' + shell.syscalls.getPWD()  + '>';
 	shell.UI.promptElement.html(html);
-}
+};
 shell.UI.lockInput = function(){
   shell.UI.inputElement.css('display' , 'none');
-}
+};
 shell.UI.unlockInput = function(){
   shell.UI.inputElement.css('display' , 'block');
-}
+};
 
 shell.UI.RegReplaceInInput = function(old , replacment){
 	var reg = new RegExp(old, 'i');
 	var input = shell.UI.inputField.val();
 	shell.UI.inputField.val(input.replace(reg, replacment ));
-}
+};
 
 /* Get the shell UI ready for the next command **/
 shell.UI.prepareForNextCommand = function(){
@@ -108,7 +108,7 @@ shell.UI.prepareForNextCommand = function(){
 	
 	
 	shell.UI.unlockInput();
-}
+};
 
 shell.processInput = function(){
 	/* get the current command from the input field */	
@@ -128,7 +128,7 @@ shell.processInput = function(){
 
 	shell.keyboard.addNewCommandToHistory(command);
 	shell.exec();
-}
+};
 shell.exec = function (){
 	/* Get the command that i need to exectue **/
 	var command = shell.pipe.callQueueNext();
@@ -137,7 +137,7 @@ shell.exec = function (){
 	 *  For example:  ls moski_doski ==> ['ls' , 'moski_doski']
 	 */
 	var args = command.split(" ");
-	args = jQuery.ArrayCompact(args)	
+	args = jQuery.ArrayCompact(args);	
 	 
 	/* Push the data from previous piped command as an argument/input **/
 	if(shell.pipe.dataOnPipe){
@@ -159,7 +159,7 @@ shell.exec = function (){
 	// Lets call this baby
 	commandObj.call(args);
 	return false;
-}
+};
 
 shell.execFromCallStack = function(failed){
 	if(failed == undefined) failed = false;
@@ -177,7 +177,7 @@ shell.execFromCallStack = function(failed){
 		args.shift();
 	}	
 	(failed ? commandObj.fail(args) : commandObj.call(args));
-}
+};
 
 
 shell.execCallBack = function(data){
@@ -185,7 +185,7 @@ shell.execCallBack = function(data){
 	var args = shell.execStack.slice();
 	var commandObj = shell.commands.findCommand(args[0]);
 	commandObj.callback(data);
-}
+};
 
 
 
@@ -194,7 +194,7 @@ shell.execCallBack = function(data){
 shell.prepareForNextCommand = function(){
 	shell.UI.prepareForNextCommand();
 	shell.pipe.resetCallQueueEmpty();
-}
+};
 
 /* Deals with the shell errors 
    An Assiocated array implemantation. When a command gets included it pushs the defined

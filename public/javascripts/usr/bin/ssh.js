@@ -16,11 +16,11 @@ shell.command.ssh = function(){
   // as easy as it gets, no errors for this function ... assuming my inode validation is working :)
   this.errors = function(){
 	return [];
-  }
+  };
   
   this.call = function(args){
 	shell.UI.lockInput();
 	window.location.replace("/oauth/connect");
-  }
-}
+  };
+};
 shell.commands.require("ssh");

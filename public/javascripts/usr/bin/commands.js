@@ -24,7 +24,7 @@ shell.command.base = function(){
   this.hasMore = false;
   this.results = new Array();
   this.errors = new Array();
-}
+};
 
 
 /* the command includer function, use this function to require a command and use it. **/
@@ -36,8 +36,8 @@ shell.commands.require = function(name,base){
        'shell.commands.list["'+name+'"] = shell.commandObj.'+name+";");
   
   // push the definded errors for this command into the global error hash
-  jQuery.ArrayCopyAssociative(shell.errors.errors ,   shell.commands.findCommand(name).errors())
-}
+  jQuery.ArrayCopyAssociative(shell.errors.errors ,   shell.commands.findCommand(name).errors());
+};
 
 /* Return a list of all commands defined including the aliases **/
 shell.commands.listWithAlias = function(){
@@ -46,7 +46,7 @@ shell.commands.listWithAlias = function(){
 		arr = arr.concat(shell.commands.list[key].aliases);
   	}
     return arr;
-}
+};
 
 /* Return a list of all commands defined including the aliases **/
 shell.commands.findCommand = function(command){
@@ -59,5 +59,5 @@ shell.commands.findCommand = function(command){
      	}
   	}
 	return searcher;
-}
+};
 

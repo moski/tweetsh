@@ -20,16 +20,16 @@ shell.callbacks.getUser = function(data){
 		// ok, lets redo and call the command again after we've created the directory. 
 		shell.execFromCallStack(false);
 	}
-}
+};
 
 shell.callbacks.lsTweets = function(data){
 	shell.execCallBack(data);
-}
+};
 
 
 shell.callbacks.lsUsers = function(data){
 	shell.execCallBack(data);
-}
+};
 
 shell.callbacks.getUserTabCompletion = function(data){
 	if(shell.twitter.errored(data)){
@@ -41,7 +41,7 @@ shell.callbacks.getUserTabCompletion = function(data){
 		e.keyCode = 9;
 		shell.UI.inputField.trigger(e);
 	}
-}
+};
 
 
 // the callback after tweeting.
@@ -54,4 +54,4 @@ shell.callbacks.tweet = function(data){
 		shell.std.cout(data['data'] , eval("shell.parsers." + data['json_class']));
 		shell.prepareForNextCommand();
 	}
-}
+};

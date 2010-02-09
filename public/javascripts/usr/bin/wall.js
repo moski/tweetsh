@@ -17,7 +17,7 @@ shell.command.wall = function(){
 	error_arr["HEAD_NOINPUT"] = "requires an input";
 	error_arr["WALL_LOGGED_IN"]   = "Must be logged in to use the wall command";
 	return error_arr;
-  }
+  };
   
   this.call = function(args){
 	var tweet = "";
@@ -47,30 +47,29 @@ shell.command.wall = function(){
 	$.post('/twitter/update', {update: tweet}, shell.callbacks.tweet , "json");
   	shell.UI.lockInput();
 	return false;
-  }
+  };
   this.fail = function(msg){
 	shell.std.cerr(msg);
-  }
+  };
 
   this.parseInput = function(data){
-	var tweet = ''
+	var tweet = '';
 	if(jQuery.isArray(data)){
 		tweet = this.parseInputHelper(data[0]);
 	}else{
 		tweet = this.parseInputHelper(data);
 	}
 	return tweet;
-  }
+  };
 
   this.parseInputHelper = function(value){
-	var tweet = ''
+	var tweet = '';
 	if(value['json_class'] == 'Tweet'){
 	  	tweet = value['data']['text'];
 	}else if(value['json_class'] == 'Inode'){
 		tweet = value.name;
 	}
 	return tweet;	
-  }
-
-}
-shell.commands.require("wall")
+  };
+};
+shell.commands.require("wall");

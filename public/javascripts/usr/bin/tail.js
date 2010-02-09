@@ -17,7 +17,7 @@ shell.command.tail = function(){
 	error_arr["HEAD_NOINPUT"] = "requires an input";
 	error_arr["HEAD_NOPTION"]   = "option require an argument";
 	return error_arr;
-  }
+  };
   
   this.call = function(args){
 	// Validate incoming input
@@ -49,11 +49,11 @@ shell.command.tail = function(){
 	}
 	data = data.slice(data.length - count, data.length);
 	shell.std.cout(data , parser);
-  }
+  };
 
   this.fail = function(msg){
 	shell.std.cerr(msg);
-  }	
+  };
 
-}
-shell.commands.require("tail")
+};
+shell.commands.require("tail");

@@ -32,7 +32,6 @@ javascript_bundle(:all,
  'usr/bin/ls', 'usr/bin/parsers', 'usr/bin/ssh' , 'usr/bin/exit', 'usr/bin/head', 
  'usr/bin/tail', 'usr/bin/wc', 'usr/bin/wall', "usr/bin/man"])
 
-
 # Set the Mime-type for json
 # NOTE: (invalid syntax) after upgrading to sintra 1.0 a .. but seems everthing
 #       is still working fine

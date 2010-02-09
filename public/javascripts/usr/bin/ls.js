@@ -12,7 +12,7 @@ shell.command.ls = function(){
   this.aliases = new Array("ls");
   this.help = "list directory contents";
   this.helptext = "";
-  this.parameters  = "path";  
+  this.parameters  = "path"; 
 
   // define errors for the cd command. errors function will be included when we require the command.
   this.errors = function(){
@@ -20,7 +20,7 @@ shell.command.ls = function(){
 	 error_arr["ENOTDIR"] = "No such file or directory";
 	 error_arr["EBADF"]   = "No such file or directory";
 	 return error_arr;	
-  }
+  };
 
   this.call = function(args){
 	var path = args[0];
@@ -34,15 +34,15 @@ shell.command.ls = function(){
 	}else{
 		this.porcess(inode);
 	}
-  }
+  };
   this.fail = function(msg){
 	if(msg == undefined) msg = "";
 	shell.std.cerr(msg);
 	shell.prepareForNextCommand();
-  }
+  };
   this.pass = function(){
 	shell.prepareForNextCommand();
-  }
+  };
   
   /* Ok, we have the node, its time to show some results **/ 	
   this.porcess = function(node){
@@ -54,7 +54,7 @@ shell.command.ls = function(){
 		shell.std.cout(node.children , shell.parsers.inodeArray);
 		this.pass();
 	}
-  }
+  };
   this.callback = function(data){
 	if(shell.twitter.errored(data)){
 		shell.errors.errindex = "GENERAL";
@@ -63,6 +63,6 @@ shell.command.ls = function(){
 		shell.std.cout(data['data'] , eval("shell.parsers." + data['json_class']));
 		this.pass();
 	}
-  }
-}
+  };
+};
 shell.commands.require("ls");
