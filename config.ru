@@ -1,4 +1,3 @@
 #!/usr/bin/env ruby
-require 'tweetsh'
+require './tweetsh'
 run Sinatra::Application
-

@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
+$:.unshift "."
 require 'rubygems'
 require 'sinatra'
 
 # The Oauth engine used to interact and authenticate with twitter
-# configuration is located in config/oauth.yml 
+# configuration is located in config/oauth.yml
 require 'twitter_oauth'
 
 # A simple interface to deal with sessions and oauth client
@@ -25,11 +26,11 @@ Dir["lib/extend/twitter_oauth/*.rb"].each {|r| require r}
 # this will do for now
 require 'sinatra/bundles'
 stylesheet_bundle(:all, %w(main))
-javascript_bundle(:all, 
-['usr/include/shell.h', 'utilites.jquery', 'usr/bin/keyboard','usr/bin/shell', 'usr/bin/commands',  
+javascript_bundle(:all,
+['usr/include/shell.h', 'utilites.jquery', 'usr/bin/keyboard','usr/bin/shell', 'usr/bin/commands',
  'usr/bin/pipe', 'usr/bin/iostream', 'usr/bin/clear', 'usr/include/inode.h', 'usr/bin/twitter_FS',
- 'usr/bin/syscalls', 'usr/bin/pwd', 'usr/bin/cd', 'usr/bin/callbacks', 'usr/bin/twitter', 
- 'usr/bin/ls', 'usr/bin/parsers', 'usr/bin/ssh' , 'usr/bin/exit', 'usr/bin/head', 
+ 'usr/bin/syscalls', 'usr/bin/pwd', 'usr/bin/cd', 'usr/bin/callbacks', 'usr/bin/twitter',
+ 'usr/bin/ls', 'usr/bin/parsers', 'usr/bin/ssh' , 'usr/bin/exit', 'usr/bin/head',
  'usr/bin/tail', 'usr/bin/wc', 'usr/bin/wall', "usr/bin/man" , "usr/bin/reverse"])
 
 # Set the Mime-type for json
@@ -40,12 +41,13 @@ javascript_bundle(:all,
 
 # Enable sessions and Load the Conf file.
 configure do
-  set :sessions, true
+  #set :sessions, true
+  use Rack::Session::Pool
   @@config = YAML.load_file("config/oauth.yml") rescue nil || {}
 end
 
 # Include the Authentication helper
-# Sinatra::Authentication defines the interface when dealing with 
+# Sinatra::Authentication defines the interface when dealing with
 # session/current_user and loading the twitter_oauth client, please
 # check lib/authentication.rb for mare information
 helpers do
@@ -70,7 +72,7 @@ end
 
 # Pinging the site, useful for site monitoring
 # Note: This function will skip all the before filter.
-get '/ping' do 
+get '/ping' do
   'pong'
 end
 
@@ -80,6 +82,7 @@ end
 # Please check js/user/bin/callbacks.js for more information
 post '/twitter/users' do
   user = User.new(@client.show(params['user']))
+
   user.path = params['path']
   user.to_json
 end
@@ -90,16 +93,16 @@ end
 post %r{/twitter/timelines/(user_timeline|home_timeline|public_timeline)} do |action|
   # Extract the username
   screen_name = (params['path'] =~ /\/([A-Za-z_0-9]+)\/timelines\/(timeline|personal)/) ? $1 : nil
-  
+
   #(user_timeline|friends_timeline|mentions|retweeted_by_me|retweeted_to_me|retweets_of_me)
   # Setup the options
   options = {}
   options[:screen_name] = screen_name unless screen_name.nil?
-  
+
   # Get the data and parse it
   data   = @client.send(action ,  options)
   tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(data)
-  
+
   # return data
   tweets.to_json
 end
@@ -112,21 +115,23 @@ end
 post %r{/twitter/(mentions|public_mentions)} do |action|
   # Extract the username, only used if the call is 2 public_mentions
   screen_name = (params['path'] =~ /\/([A-Za-z_0-9]+)\/(mentions|public_mentions)/) ? $1 : nil
-  
+
   # Setup the options
   options = {}
   options[:show_user] = true if action == 'public_mentions'
-  
+
   # If its a a call to the public_mentions, meaning we are calling the search api.
   if(action == 'public_mentions')
     options[:show_user] = true
     data = @client.send(action, screen_name , options)
+    puts @client.inspect
+
     tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(Tweets.convertSearchResults2TweetsHash(data))
   else
     data   = @client.send(action ,  options)
     tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(data)
   end
-  
+
   # return data
   tweets.to_json
 end
@@ -135,7 +140,7 @@ end
 post %r{/twitter/retweets/(by_me|to_me|of_me)} do |action|
   # Setup the options
   options = {}
-  
+
   # Get the data and parse it
   # we have 3 actions defined in the twitter_oauth:
   # => 1.retweeted_by_me  2.retweeted_to_me   3. retweets_of_me
@@ -143,7 +148,7 @@ post %r{/twitter/retweets/(by_me|to_me|of_me)} do |action|
   action_name = (action == 'of_me') ? "retweets_#{action}" : "retweeted_#{action}"
   data   = @client.send(action_name ,  options)
   tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(data)
-  
+
   # return data
   tweets.to_json
 end
@@ -159,13 +164,13 @@ post %r{/twitter/favorites/(public|private)} do |action|
 
   # Setup the options
   options = {}
-  
+
   # Set the screen_name if its a public call.
   options[:screen_name] = screen_name unless screen_name.nil? && action == 'public'
-  
+
   data   = @client.send("favorites" ,  options)
   tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(data)
-  
+
   # return data
   tweets.to_json
 end
@@ -175,16 +180,16 @@ end
 post %r{/twitter/users/(friends|followers)} do |action|
   # Extract the username
   screen_name = (params['path'] =~ /\/([A-Za-z_0-9]+)\/friends|followers/) ? $1 : nil
-  
+
   # Setup the options
   options = {}
   options[:screen_name] = screen_name unless screen_name.nil?
   options[:cursor] = params['cursor'] if params.has_key?('cursor')
-  
+
   # Get the data and parse it
   data = @client.send("#{action}_with_cursor" ,  options)
   users = data.has_key?('error') ? Base.new(data) : Users.new(data)
-  
+
   # return data
   users.to_json
 end
@@ -199,7 +204,7 @@ end
 
 # store the request tokens and send to Twitter
 # PLEASE NOTE:
-# when running sinatra + thin ... when u call window.location.replace("/oauth/connect") using chrome, 
+# when running sinatra + thin ... when u call window.location.replace("/oauth/connect") using chrome,
 # the session will get lost , no frakkin idea why, for now, use mongrel or webrick.
 get '/oauth/connect' do
   request_token = @client.request_token(
@@ -207,7 +212,7 @@ get '/oauth/connect' do
   )
   session[:request_token] = request_token.token
   session[:request_token_secret] = request_token.secret
-  redirect request_token.authorize_url.gsub('authorize', 'authenticate') 
+  redirect request_token.authorize_url.gsub('authorize', 'authenticate')
 end
 
 # auth URL is called by twitter after the user has accepted the application
@@ -223,7 +228,7 @@ get '/oauth/auth' do
   rescue OAuth::Unauthorized
     redirect '/'
   end
-  
+
   if @client.authorized?
        # Storing the access tokens so we don't have to go back to Twitter again
       # in this session.  In a larger app you would probably persist these details somewhere.
@@ -247,7 +252,7 @@ get '/oauth/disconnect' do
 end
 
 
-helpers do 
+helpers do
   def partial(name, options={})
     erb("_#{name.to_s}".to_sym, options.merge(:layout => false))
   end
