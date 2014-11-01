@@ -1,15 +1,15 @@
 /*
  *  twitter.js
  *  Deals with the twitter data(parse json ... etc)
- *	
+ *
  */
 
 
-/* The container for system calls **/  
+/* The container for system calls **/
 shell.module("shell.twitter");
 
 shell.twitter.errored = function(json){
-	return (json['data'].error ? true : false);
+	return (json['data'].errors ? true : false);
 };
 
 shell.twitter.loggedIn = function(){

@@ -2,7 +2,7 @@
  *  twitter_FS.js
  *  The core of the file structure used on top of twitter
  *
- *  require 'inode.h.js'	
+ *  require 'inode.h.js'
  */
 
 
@@ -20,13 +20,13 @@ shell.twitter_FS.initialize = function(current_user){
 	}else{
 		shell.config.user = current_user;
 	}
-	
+
 	shell.syscalls.mkdir("/");
 	shell.syscalls.mkdir("/home" , "twitter/users");
-	shell.syscalls.mount("/home/" , "cd" ,"twitter/users" ,"shell.callbacks.getUser"); 
-	
-	shell.syscalls.mkdirAndMount("/public_timeline" , "ls" ,"twitter/timelines/public_timeline","shell.callbacks.lsTweets");
-	
+	shell.syscalls.mount("/home/" , "cd" ,"twitter/users" ,"shell.callbacks.getUser");
+
+	//shell.syscalls.mkdirAndMount("/public_timeline" , "ls" ,"twitter/timelines/public_timeline","shell.callbacks.lsTweets");
+
 	if(shell.twitter.loggedIn()){
 		shell.syscalls.mkdirHome("/home/",shell.config.user);
 		shell.syscalls.chdir(shell.twitter_FS.join("/home/" , shell.config.user));
@@ -45,7 +45,7 @@ shell.twitter_FS.basename = function(path){
 	var b = path.replace(/^.*[\/\\]/g, '');
     if (typeof(suffix) == 'string' && b.substr(b.length-suffix.length) == suffix) {
     	b = b.substr(0, b.length-suffix.length);
-    }    
+    }
     return b;
 };
 
@@ -59,7 +59,7 @@ shell.twitter_FS.dirname = function(path){
 
 
 shell.twitter_FS.expandPath = function(path){
-	return shell.twitter_FS.join(((shell.twitter_FS.cwd == null) ? "/" : shell.syscalls.getPWD()), path); 
+	return shell.twitter_FS.join(((shell.twitter_FS.cwd == null) ? "/" : shell.syscalls.getPWD()), path);
 };
 
 
@@ -68,7 +68,7 @@ shell.twitter_FS.join = function(path1 , path2){
 	if(path1.charAt(path1.length -1) == shell.twitter_FS.File_SEPARATOR){
 		path1 = path1.slice(0, -1);
 	}
-	
+
 	if(path2.charAt(0) == shell.twitter_FS.File_SEPARATOR){
 		path2 = path2.substr(1);
 	}

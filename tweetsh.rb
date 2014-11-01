@@ -101,7 +101,10 @@ post %r{/twitter/timelines/(user_timeline|home_timeline|public_timeline)} do |ac
 
   # Get the data and parse it
   data   = @client.send(action ,  options)
-  tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(data)
+  tweets = (data.is_a?(Hash) && data.has_key?('errors')) ? Base.new(data) : Tweets.new(data)
+
+  puts tweets.inspect
+
 
   # return data
   tweets.to_json
@@ -124,13 +127,17 @@ post %r{/twitter/(mentions|public_mentions)} do |action|
   if(action == 'public_mentions')
     options[:show_user] = true
     data = @client.send(action, screen_name , options)
-    puts @client.inspect
-
-    tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(Tweets.convertSearchResults2TweetsHash(data))
+    tweets = (data.is_a?(Hash) && data.has_key?('errors')) ? Base.new(data) : Tweets.new(Tweets.convertSearchResults2TweetsHash(data))
   else
     data   = @client.send(action ,  options)
-    tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(data)
+
+    puts "0000000000000"
+    puts data.inspect
+
+    tweets = (data.is_a?(Hash) && data.has_key?('errors')) ? Base.new(data) : Tweets.new(data)
   end
+
+  puts tweets.inspect
 
   # return data
   tweets.to_json
@@ -147,7 +154,7 @@ post %r{/twitter/retweets/(by_me|to_me|of_me)} do |action|
   # so we need cater for the retweets_ .. a simple if will do.
   action_name = (action == 'of_me') ? "retweets_#{action}" : "retweeted_#{action}"
   data   = @client.send(action_name ,  options)
-  tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(data)
+  tweets = (data.is_a?(Hash) && data.has_key?('errors')) ? Base.new(data) : Tweets.new(data)
 
   # return data
   tweets.to_json
@@ -169,7 +176,7 @@ post %r{/twitter/favorites/(public|private)} do |action|
   options[:screen_name] = screen_name unless screen_name.nil? && action == 'public'
 
   data   = @client.send("favorites" ,  options)
-  tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new(data)
+  tweets = (data.is_a?(Hash) && data.has_key?('errors')) ? Base.new(data) : Tweets.new(data)
 
   # return data
   tweets.to_json
@@ -188,7 +195,7 @@ post %r{/twitter/users/(friends|followers)} do |action|
 
   # Get the data and parse it
   data = @client.send("#{action}_with_cursor" ,  options)
-  users = data.has_key?('error') ? Base.new(data) : Users.new(data)
+  users = data.has_key?('errors') ? Base.new(data) : Users.new(data)
 
   # return data
   users.to_json
@@ -198,7 +205,7 @@ end
 # Send a tweet
 post '/twitter/update' do
   data = @client.update(params[:update])
-  tweets = (data.is_a?(Hash) && data.has_key?('error')) ? Base.new(data) : Tweets.new([data])
+  tweets = (data.is_a?(Hash) && data.has_key?('errors')) ? Base.new(data) : Tweets.new([data])
   tweets.to_json
 end
 
